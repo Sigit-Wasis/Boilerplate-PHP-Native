@@ -7,3 +7,83 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE users(
+    id INT AUTO_INTCREMENT PRIMARY KEY,
+    username Varcar(50) UNIQUE,
+    nama_lengkap VARCAR(100),
+    email VARCAR(100)UNIQUE,
+    pasword VARCAR(255),
+    alamat VARCAR(50) UNIQUE,
+    foto VARCAR (50) UNIQUE,
+    profile_pic VARCAR(255),
+    created_at TIMESTAMP DEFALUT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
+
+CREATE TABLE posts (
+    id INT AUTO_INTCREMENT PRIMARY KEY,
+    user_id INT,
+    media VARCAR(255),
+    caption TEXT,
+    created_at TIMESTAMP DEFALUT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+
+
+
+);
+
+CREATE TABLE likes (
+    id INT AUTO_INTREMENT PRIMARY KEY,
+    POST_id INT,
+    user_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
+);
+
+CREATE TABLE comments (
+    id INT AUTO_INTCREMENT PRIMARY KEY,
+    POST_id INT,
+    user_id INT,
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
+
+
+
+);
+
+CREATE TABLE follows(
+    id INT AUTO_INTCREMENT PRIMARY KEY,
+    follower_id INT,
+    following_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
+
+
+
+);
+
+CREATE TABLE pv_post_image(
+    id INT AUTO_INTCREMENT PRIMARY KEY,
+    post_id INT,
+    media_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
+
+
+);
+CREATE TABLE media(
+    id INT AUTO_INTCREMENT PRIMARY KEY,
+    file VARCAR(255),
+    type_file VARCAR(50),
+    size INT,
+    resolution VARCAR(20)
+
+);
+
+

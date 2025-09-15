@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS boilerplate;
 USE boilerplate;
 
+<<<<<<< HEAD
 CREATE TABLE users(
     id INT AUTO_INTCREMENT PRIMARY KEY,
     username Varcar(50) UNIQUE,
@@ -103,3 +104,11 @@ CREATE TABLE role_permissions (
 );
 
 
+=======
+CREATE TABLE IF NOT EXISTS users (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(255) NOT NULL,
+    email       VARCHAR(255) NOT NULL UNIQUE,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+>>>>>>> 23882651cc6b11211f0b420f50e319a465db6fc1

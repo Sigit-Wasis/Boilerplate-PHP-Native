@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS boilerplate;
 USE boilerplate;
 
+<<<<<<< HEAD
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE,
@@ -87,4 +88,12 @@ CREATE TABLE role_permissions (
     PRIMARY KEY (role_id, permission_id),
     FOREIGN KEY (role_id) REFERENCES roles(id),
     FOREIGN KEY (permission_id) REFERENCES permissions(id)
+);
+
+CREATE TABLE IF NOT EXISTS users (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(255) NOT NULL,
+    email       VARCHAR(255) NOT NULL UNIQUE,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
 );

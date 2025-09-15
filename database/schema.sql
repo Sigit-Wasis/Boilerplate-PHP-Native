@@ -1,12 +1,6 @@
 CREATE DATABASE IF NOT EXISTS boilerplate;
 USE boilerplate;
 
-CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 CREATE TABLE users(
     id INT AUTO_INTCREMENT PRIMARY KEY,
     username Varcar(50) UNIQUE,
@@ -27,7 +21,8 @@ CREATE TABLE posts (
     media VARCAR(255),
     caption TEXT,
     created_at TIMESTAMP DEFALUT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
 
 
 
@@ -38,6 +33,7 @@ CREATE TABLE likes (
     POST_id INT,
     user_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
 );
@@ -48,6 +44,7 @@ CREATE TABLE comments (
     user_id INT,
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
 
@@ -60,6 +57,7 @@ CREATE TABLE follows(
     follower_id INT,
     following_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
 
@@ -71,8 +69,8 @@ CREATE TABLE pv_post_image(
     id INT AUTO_INTCREMENT PRIMARY KEY,
     post_id INT,
     media_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
+    PRIMARY KEY (post_id, media_id),
+    FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE, 
     FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
 
 
@@ -84,6 +82,24 @@ CREATE TABLE media(
     size INT,
     resolution VARCAR(20)
 
+);
+
+CREATE TABLE roles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE permissions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE role_permissions (
+    role_id INT,
+    permission_id INT,
+    PRIMARY KEY (role_id, permission_id),
+    FOREIGN KEY (role_id) REFERENCES roles(id),
+    FOREIGN KEY (permission_id) REFERENCES permissions(id)
 );
 
 

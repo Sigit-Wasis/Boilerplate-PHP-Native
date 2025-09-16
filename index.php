@@ -24,7 +24,7 @@ switch ($request) {
     // Modul Jabatan
     case '/jabatan':
     case '/jabatan/index':
-        require_once __DIR__ . '/../modules/jabatan.php';
+        require_once __DIR__ . '/modules/jabatan.php';
         break;
 
     default:

@@ -1,17 +1,12 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
 
-// Fungsi untuk sanitasi input
-function sanitizeInput($data) {
-    return htmlspecialchars(stripslashes(trim($data)));
-}
-
 // Fungsi CRUD: Create
 function createUser($name, $email) {
     $conn = getDBConnection();
     
-    $name = sanitizeInput($name);
-    $email = sanitizeInput($email);
+    $name = htmlspecialchars(stripslashes(trim($name)));
+    $email = htmlspecialchars(stripslashes(trim($email)));
     
     $sql = "INSERT INTO users (name, email) VALUES (?, ?)";
     $stmt = $conn->prepare($sql);

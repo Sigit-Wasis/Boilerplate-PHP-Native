@@ -101,4 +101,4 @@ Kami menyambut kontribusi! Jika Anda ingin berkontribusi:
 
 ## 📬 Kontak
 
-Jika ada pertanyaan atau saran, silakan buka issue di repository ini atau hubungi kami melalui [email@example.com](mailto:email@example.com).
+Jika ada pertanyaan atau saran, silakan buka issue di repository ini atau hubungi kami melalui [hellowasis@gmail.com](mailto:hellowasis@gmail.com).

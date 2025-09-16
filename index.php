@@ -16,13 +16,22 @@ switch ($request) {
     // Modul User
     case '/user':
     case '/user/index':
-        require_once __DIR__ . '/modules/user.php';
+        require_once __DIR__ . '/modules/users/index.php';
         break;
-
-    // Modul Post
-    case '/post':
-    case '/post/index':
-        require_once __DIR__ . '/modules/post.php';
+    case '/user/create':
+        require_once __DIR__ . '/modules/users/create.php';
+        break;
+    case '/user/store': // aksi simpan user baru
+        require_once __DIR__ . '/modules/users/store.php';
+        break;
+    case '/user/edit':
+        require_once __DIR__ . '/modules/users/edit.php';
+        break;
+    case '/user/update': // aksi update user
+        require_once __DIR__ . '/modules/users/update.php';
+        break;
+    case '/user/delete':
+        require_once __DIR__ . '/modules/users/delete.php';
         break;
 
     // Modul Jabatan

@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../config/database.php';
 
 // Fungsi CRUD: Create
-function createUser($name, $email) {
+function createUser(string $name, string $email): bool {
     $conn = getDBConnection();
     
     $name = htmlspecialchars(stripslashes(trim($name)));
@@ -20,7 +20,7 @@ function createUser($name, $email) {
 }
 
 // Fungsi find user by ID
-function getUserById($id) {
+function getUserById(int $id): ?array {
     $conn = getDBConnection();
     $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
     $stmt->bind_param("i", $id);
@@ -32,7 +32,7 @@ function getUserById($id) {
 }
 
 // Fungsi CRUD: Update
-function updateUser($id, $name, $email) {
+function updateUser(int $id, string $name, string $email): bool {
     $conn = getDBConnection();
 
     $name = htmlspecialchars(stripslashes(trim($name)));
@@ -49,7 +49,7 @@ function updateUser($id, $name, $email) {
 }
 
 // Fungsi CRUD: Delete
-function deleteUser($id) {
+function deleteUser(int $id): bool {
     $conn = getDBConnection();
     $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
     $stmt->bind_param("i", $id);

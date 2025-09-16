@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../models/User.php';
 
 $users = getUsers(); // fungsi dari models/User.php
 ?>

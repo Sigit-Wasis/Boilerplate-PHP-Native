@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../models/Jabatan.php';
 
 $jabatan = getJabatan(); // fungsi dari models/Jabatan.php
 ?>

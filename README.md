@@ -55,10 +55,10 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek ini di lingkungan lokal A
       ```
 
 4. **Jalankan Aplikasi**:
-    - Arahkan document root web server (Apache/Nginx) ke folder `public/`.
+    - Arahkan document root web server (Apache/Nginx).
     - Alternatifnya, gunakan PHP built-in server:
       ```bash
-      php -S localhost:8000 -t public
+      php -S localhost:8000
       ```
 
 5. **Akses Aplikasi**:

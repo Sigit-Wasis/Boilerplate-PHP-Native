@@ -1,7 +1,5 @@
 <?php
 require_once __DIR__ . '/config/database.php';
-require_once __DIR__ . '/models/User.php';
-require_once __DIR__ . '/models/Jabatan.php';
 
 $request = $_SERVER['REQUEST_URI'];
 $request = parse_url($request, PHP_URL_PATH);
@@ -19,6 +17,12 @@ switch ($request) {
     case '/user':
     case '/user/index':
         require_once __DIR__ . '/modules/user.php';
+        break;
+
+    // Modul Post
+    case '/post':
+    case '/post/index':
+        require_once __DIR__ . '/modules/post.php';
         break;
 
     // Modul Jabatan

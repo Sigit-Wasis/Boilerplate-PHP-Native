@@ -41,4 +41,31 @@ function getUsers() {
     $conn->close();
     return $users;
 }
+
+
+// Fungsi authentikasi
+function authenticateUser($email, $password) {
+    $conn = getDBConnection();
+    
+    $email = sanitizeInput($email);
+    $password = sanitizeInput($password);
+    
+    $sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $email, md5($password)); // Asumsikan password disimpan dalam bentuk hash MD5
+    $stmt->execute();
+    
+    $result = $stmt->get_result();
+    $user = null;
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+    }
+    
+    $stmt->close();
+    $conn->close();
+
+    return $user;
+}
+
+
 ?>

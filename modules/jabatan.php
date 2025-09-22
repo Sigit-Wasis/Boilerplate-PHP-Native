@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../includes/header.php';
+require_once _DIR_ . '/../includes/header.php';
 
 $jabatan = getJabatan(); // fungsi dari models/Jabatan.php
 ?>
@@ -12,4 +12,4 @@ $jabatan = getJabatan(); // fungsi dari models/Jabatan.php
     </ul>
 </div>
 <?php
-require_once __DIR__ . '/../includes/footer.php';
+require_once _DIR_ . '/../includes/footer.php';

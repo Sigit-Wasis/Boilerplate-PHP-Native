@@ -1,7 +1,5 @@
 <?php
 require_once __DIR__ . '/config/database.php';
-require_once __DIR__ . '/models/User.php';
-require_once __DIR__ . '/models/Jabatan.php';
 
 $request = $_SERVER['REQUEST_URI'];
 $request = parse_url($request, PHP_URL_PATH);
@@ -26,13 +24,29 @@ switch ($request) {
     // Modul User
     case '/user':
     case '/user/index':
-        require_once __DIR__ . '/modules/user.php';
+        require_once __DIR__ . '/modules/users/index.php';
+        break;
+    case '/user/create':
+        require_once __DIR__ . '/modules/users/create.php';
+        break;
+    case '/user/store': // aksi simpan user baru
+        require_once __DIR__ . '/modules/users/store.php';
+        break;
+    case '/user/edit':
+        require_once __DIR__ . '/modules/users/edit.php';
+        break;
+    case '/user/update': // aksi update user
+        require_once __DIR__ . '/modules/users/update.php';
+        break;
+    case '/user/delete':
+        require_once __DIR__ . '/modules/users/delete.php';
         break;
 
     // Modul Jabatan
     case '/jabatan':
     case '/jabatan/index':
         require_once __DIR__ . '/modules/jabatan.php';
+<<<<<<< HEAD
         break;
 
     // Modul post
@@ -65,6 +79,8 @@ switch ($request) {
      case '/profil':
     case '/profil/index':
         require_once __DIR__ . '/modules/profil/index.php';
+=======
+>>>>>>> 1e01a3f506a160359ed9cc95849f612d7a575c4a
         break;
 
     default:

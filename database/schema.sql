@@ -2,92 +2,105 @@ CREATE DATABASE IF NOT EXISTS boilerplate;
 USE boilerplate;
 
 
-CREATE TABLE users(
-    id INT AUTO_INTCREMENT PRIMARY KEY,
-    username Varcar(50) UNIQUE,
-    nama_lengkap VARCAR(100),
-    email VARCAR(100)UNIQUE,
-    pasword VARCAR(255),
-    alamat VARCAR(50) UNIQUE,
-    foto VARCAR (50) UNIQUE,
-    profile_pic VARCAR(255),
-    created_at TIMESTAMP DEFALUT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
+-- ====================
+-- USERS
+-- ====================
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE,
+    nama_lengkap VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(255),
+    alamat VARCHAR(255),
+    foto VARCHAR(255),
+    profile_pic VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- ====================
+-- POSTS
+-- ====================
 CREATE TABLE posts (
-    id INT AUTO_INTCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    media VARCAR(255),
     caption TEXT,
-    created_at TIMESTAMP DEFALUT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-
-
-
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- ====================
+-- LIKES
+-- ====================
 CREATE TABLE likes (
-    id INT AUTO_INTREMENT PRIMARY KEY,
-    POST_id INT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT,
     user_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- ====================
+-- COMMENTS
+-- ====================
 CREATE TABLE comments (
-    id INT AUTO_INTCREMENT PRIMARY KEY,
-    POST_id INT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT,
     user_id INT,
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
-
-
-
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE follows(
-    id INT AUTO_INTCREMENT PRIMARY KEY,
+-- ====================
+-- FOLLOWS
+-- ====================
+CREATE TABLE follows (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     follower_id INT,
     following_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
-
-
-
+    FOREIGN KEY (follower_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (following_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE pv_post_image(
-    id INT AUTO_INTCREMENT PRIMARY KEY,
+-- ====================
+-- MEDIA
+-- ====================
+CREATE TABLE media (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    file VARCHAR(255),
+    type_file VARCHAR(50),
+    size INT,
+    resolution VARCHAR(20)
+);
+
+-- ====================
+-- POST - MEDIA (pivot table)
+-- ====================
+CREATE TABLE pv_post_image (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     post_id INT,
     media_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES post(id),ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES media(id),ON DELETE CASCADE
-
-
-);
-CREATE TABLE media(
-    id INT AUTO_INTCREMENT PRIMARY KEY,
-    file VARCAR(255),
-    type_file VARCAR(50),
-    size INT,
-    resolution VARCAR(20)
-
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (media_id) REFERENCES media(id) ON DELETE CASCADE
 );
 
+
+
+-- ====================
+-- ROLES & PERMISSIONS
+-- ====================
 CREATE TABLE roles (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE permissions (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
 );
 
@@ -95,7 +108,6 @@ CREATE TABLE role_permissions (
     role_id INT,
     permission_id INT,
     PRIMARY KEY (role_id, permission_id),
-    FOREIGN KEY (role_id) REFERENCES roles(id),
-    FOREIGN KEY (permission_id) REFERENCES permissions(id)
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+    FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
 );
-

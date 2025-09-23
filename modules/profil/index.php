@@ -1,6 +1,11 @@
 <?php
 
 require_once __DIR__ . '/../../includes/header.php';
+// call model post
+require_once __DIR__ . '/../../models/Post.php';
+
+// Ambil semua post
+$posts = getAllPosts();
 
 ?>
 
@@ -97,12 +102,26 @@ require_once __DIR__ . '/../../includes/header.php';
   </div>
 </div>
 
-        <!-- Posts Grid -->
-        <div class="posts-grid mt-4 pb-5" id="postsGrid">
-            <div class="post-item"><div class="post-placeholder"><i class="fas fa-camera fa-2x"></i></div></div>
-            <div class="post-item"><div class="post-placeholder"><i class="fas fa-camera fa-2x"></i></div></div>
-            <div class="post-item"><div class="post-placeholder"><i class="fas fa-camera fa-2x"></i></div></div>
-        </div>  
+<div class="posts-grid mt-4 pb-5" id="postsGrid">
+    <?php if (!empty($posts)): ?>
+        <?php foreach ($posts as $post): ?>
+            <div class="post-item">
+                <?php if (!empty($post['image'])): ?>
+                    <img src="<?= '/public/img/' . htmlspecialchars($post['image']) ?>" alt="Post Image">
+                <?php else: ?>
+                    <div class="post-placeholder">
+                        <i class="fas fa-camera fa-2x"></i><br>
+                        Tidak ada gambar
+                    </div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Belum ada postingan.</p>
+    <?php endif; ?>
+</div>
+
+  
 </div>
 
 <?php

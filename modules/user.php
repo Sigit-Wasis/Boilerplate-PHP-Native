@@ -1,5 +1,5 @@
 <?php
-require_once _DIR_. '/../includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
 
 $users = getUsers(); // fungsi dari models/User.php
 ?>
@@ -53,5 +53,5 @@ $users = getUsers(); // fungsi dari models/User.php
     </table>
 </div>
 <?php
-require_once _DIR_. '/../includes/footer.php';
+require_once __DIR__ . '/../includes/footer.php';
 ?>

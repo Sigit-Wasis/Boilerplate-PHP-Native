@@ -4,14 +4,7 @@ require_once __DIR__ . '/../../includes/header.php';
 require_once __DIR__ . '/../../config/database.php';
 
 // Ambil semua post
-$sql = "SELECT p.id FROM posts p ORDER BY p.created_at DESC";
-$result = $conn->query($sql);
-$posts = [];
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $posts[] = $row['id'];
-    }
-}
+
 ?>
 
 <!-- Main Content -->
@@ -20,7 +13,7 @@ if ($result && $result->num_rows > 0) {
         <div class="profile-header">
             <div class="row align-items-center">
                 <div class="col-md-4 text-center position-relative">
-                    <img id="profileImage" src="public/img/gambar2.jpg" alt="Profile Picture" class="profile-pic">
+                    <img id="profileImage" src="../../public/img/gambar1.jpg" alt="Profile Picture" class="profile-pic">
                     <input type="file" id="uploadProfile" accept="image/*" style="display:none;">
                     <label for="uploadProfile" class="position-absolute bottom-0 start-50 translate-middle-x mb-2" style="cursor:pointer;">
                         <i class="fas fa-camera" style="font-size:20px; color:white; background:#262626; padding:8px; border-radius:50%;"></i>

@@ -9,7 +9,7 @@ function getJabatan() {
     $result = $conn->query($sql);
 
     $jabatan = [];
-    if ($result->num_rows > 0) {
+    if ($result && $result->num_rows > 0) { // perbaikan: cek $result sebelum akses num_rows
         while($row = $result->fetch_assoc()) {
             $jabatan[] = $row;
         }

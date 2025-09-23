@@ -82,6 +82,9 @@ function getUsers() {
 function authenticateUser($email, $password) {
     $conn = getDBConnection();
     
+    function sanitizeInput($data) {
+        return htmlspecialchars(stripslashes(trim($data)));
+    }
     $email = sanitizeInput($email);
     $password = sanitizeInput($password);
     

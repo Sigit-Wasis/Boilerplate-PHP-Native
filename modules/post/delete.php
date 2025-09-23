@@ -1,5 +1,5 @@
 <?php
-require_once _DIR_ . '/../../models/Post.php';
+require_once __DIR__ . '/../../models/Post.php';
 
 $id = $_GET['id'] ?? null;
 

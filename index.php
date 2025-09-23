@@ -46,7 +46,6 @@ switch ($request) {
     case '/jabatan':
     case '/jabatan/index':
         require_once __DIR__ . '/modules/jabatan.php';
-<<<<<<< HEAD
         break;
 
     // Modul post
@@ -79,8 +78,6 @@ switch ($request) {
      case '/profil':
     case '/profil/index':
         require_once __DIR__ . '/modules/profil/index.php';
-=======
->>>>>>> 1e01a3f506a160359ed9cc95849f612d7a575c4a
         break;
 
     default:

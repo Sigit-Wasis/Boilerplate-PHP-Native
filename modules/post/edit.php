@@ -1,13 +1,13 @@
 <?php
-require_once _DIR_ . '/../../includes/header.php';
-require_once _DIR_ . '/../../models/Post.php';
+require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../models/Post.php';
 
 // pastikan ada parameter id
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
     echo "<div class='alert alert-danger'>ID post tidak ditemukan!</div>";
-    require_once _DIR_ . '/../../includes/footer.php';
+    require_once __DIR__ . '/../../includes/footer.php';
     exit;
 }
 
@@ -15,7 +15,7 @@ $user = getUserById($id); // fungsi ini harus ada di models/Post.php
 
 if (!$user) {
     echo "<div class='alert alert-danger'>Post tidak ditemukan!</div>";
-    require_once _DIR_ . '/../../includes/footer.php';
+    require_once __DIR__ . '/../../includes/footer.php';
     exit;
 }
 ?>
@@ -41,5 +41,5 @@ if (!$user) {
 </div>
 
 <?php
-require_once _DIR_ . '/../../includes/footer.php';
+require_once __DIR__. '/../../includes/footer.php';
 ?>

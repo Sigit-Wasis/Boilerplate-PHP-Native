@@ -11,21 +11,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // kumpulkan file yang diupload
     $uploadedFiles = [];
-    if (!empty($_FILES['images']['name'][0])) {
-        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-            if ($_FILES['images']['error'][$key] === UPLOAD_ERR_OK) {
-                $filename = uniqid() . "_" . basename($_FILES['images']['name'][$key]);
-                $targetPath = __DIR__ . '/../../public/img/' . $filename;
+if (!empty($_FILES['images']['name'][0])) {
+    foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+        if ($_FILES['images']['error'][$key] === UPLOAD_ERR_OK) {
+            $filename = uniqid() . "_" . basename($_FILES['images']['name'][$key]);
+            $targetPath = __DIR__ . '/../../public/img/' . $filename;
 
-                if (move_uploaded_file($tmp_name, $targetPath)) {
-                    $uploadedFiles[] = 'public/img/' . $filename; // path relatif
+            if (move_uploaded_file($tmp_name, $targetPath)) {
+                // ambil resolusi gambar
+                $resolution = null;
+                $imageInfo = @getimagesize($targetPath);
+                if ($imageInfo) {
+                    $resolution = $imageInfo[0] . "x" . $imageInfo[1];
                 }
+
+                // simpan detail lengkap file
+                $uploadedFiles[] = [
+                    'file'       => $filename,                       // nama unik
+                    'type_file'  => $_FILES['images']['type'][$key], // MIME type
+                    'size'       => $_FILES['images']['size'][$key], // ukuran
+                    'resolution' => $resolution,                     // resolusi
+                    'image_path' => 'public/img/' . $filename        // path relatif
+                ];
             }
         }
     }
+}
 
-    // simpan ke DB lewat model
-    createPostWithImages($caption, $uploadedFiles);
+// simpan ke DB lewat model
+createPostWithImages($caption, $uploadedFiles);
+
 
     header("Location: /profil");
     exit;

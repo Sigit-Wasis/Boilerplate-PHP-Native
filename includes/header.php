@@ -8,8 +8,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Tambahkan font Billabong CDN -->
     <link href="https://fonts.cdnfonts.com/css/billabong" rel="stylesheet">
-    <style>
-        body {
+    <!-- <link href="../public/css/style.css"> -->
+     <style>
+         body {
             background-color: #000;
             color: #fff;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -24,19 +25,19 @@
             padding: 20px 0;
         }
         
-        .main-content { 
+        .main-content {
             margin-left: 250px;
             background-color: #000;
             min-height: 100vh;
         }
         
-        /* Logo Instagram putih polos */
-        .logo-instagram {
+        .logo {
             font-family: 'Billabong', cursive;
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             color: #fff;
+            text-decoration: none;
             padding: 20px;
-            letter-spacing: 2px;
+            letter-spacing: 2px; 
         }
         
         .nav-item {
@@ -231,14 +232,42 @@
             gap: 20px;
             align-items: flex-start;
         }
-    </style>
+
+        .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 kolom */
+    gap: 15px;
+}
+
+.post-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.post-item img {
+    width: 100%;
+    object-fit: cover; /* biar rapi proporsional */
+    display: block;
+}
+.post-placeholder {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    background: #f5f5f5;
+    font-size: 14px;
+}
+        </style>
+
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="d-flex flex-column h-100">
-             <!-- ✅ Logo Instagram putih polos -->
-             <div class="logo-instagram">Instagram</div>
+            <div class="logo">Instagram</div>
             
             <nav class="flex-grow-1">
                 <a href="#" class="nav-item"><i class="fas fa-home"></i>Home</a>

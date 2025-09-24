@@ -1,15 +1,20 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
-
-// Fungsi untuk sanitasi input
-function sanitizeInput($data) {
-    return htmlspecialchars(stripslashes(trim($data)));
-}
+require_once _DIR_ . '/../config/database.php';
 
 // Fungsi untuk mendapatkan semua data jabatan
 function getJabatan() {
-    global $pdo;
-    $stmt = $pdo->prepare("SELECT * FROM jabatan");
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $conn = getDBConnection();
+
+    $sql = "SELECT * FROM jabatan";
+    $result = $conn->query($sql);
+
+    $jabatan = [];
+    if ($result && $result->num_rows > 0) { // perbaikan: cek $result sebelum akses num_rows
+        while($row = $result->fetch_assoc()) {
+            $jabatan[] = $row;
+        }
+    }
+    
+    $conn->close();
+    return $jabatan;
 }

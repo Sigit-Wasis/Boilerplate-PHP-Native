@@ -9,6 +9,8 @@ $posts = getAllPosts();
 
 ?>
 
+?>
+
 <!-- Main Content -->
 <div class="main-content">
      <!-- Profile Header -->
@@ -87,10 +89,10 @@ $posts = getAllPosts();
 
           <!-- Input File -->
           <div class="mb-3">
-            <label for="images"style="color: #0b0505ff !important;" class="form-label">Upload Gambar</label>
-            <input type="file" class="form-control" id="images" name="images[]" multiple accept="image/*">
-            <div class="form-text">Bisa pilih lebih dari satu gambar.</div>
-          </div>
+  <label for="images" style="color: #0b0505ff !important;" class="form-label">Upload Gambar</label>
+  <input type="file" class="form-control" id="images" name="images[]" accept="image/*" multiple>
+  <div class="form-text">Bisa pilih lebih dari satu gambar.</div>
+</div>
         </div>
 
         <div class="modal-footer">

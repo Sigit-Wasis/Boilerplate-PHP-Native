@@ -1,15 +1,13 @@
 <?php
 
-require_once __DIR__ . '/../../includes/header.php';
 require_once __DIR__ . '/../../config/database.php';
-
-// Ambil semua post
+require_once __DIR__ . '/../../includes/header.php';
 
 ?>
 
 <!-- Main Content -->
 <div class="main-content">
-     <!-- Profile Header -->
+    <!-- Profile Header -->
         <div class="profile-header">
             <div class="row align-items-center">
                 <div class="col-md-4 text-center position-relative">

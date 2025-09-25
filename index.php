@@ -8,17 +8,28 @@ $request = parse_url($request, PHP_URL_PATH);
 switch ($request) {
     case '/':
     case '/index.php':
-        require_once __DIR__ . '/includes/header.php';
-        echo "<h2>Selamat datang di Aplikasi PHP</h2>";
-        require_once __DIR__ . '/includes/footer.php';
+        require_once __DIR__ . '/modules/home/index.php';
         break;
 
+    // Modul Login
     case '/login':
     case '/login/index':
         require_once __DIR__ . '/modules/login/index.php';
         break;
-    case '/login/auth':
-        require_once __DIR__ . '/modules/login/auth.php';
+
+    case '/login/proses':
+        require_once __DIR__ . '/modules/login/proses.php';
+        break;
+
+    // Modul Logout
+    case '/logout':
+        require_once __DIR__ . '/modules/login/logout.php';
+        break;
+
+    // Modul profil
+    case '/profil':
+    case '/profil/index':
+        require_once __DIR__ . '/modules/profil/index.php';
         break;
 
     // Modul User
@@ -61,11 +72,6 @@ switch ($request) {
         break;
     case '/post/delete':
         require_once __DIR__ . '/modules/post/delete.php';
-        break;
-
-    case '/profil':
-    case '/profil/index':
-        require_once __DIR__ . '/modules/profil/index.php';
         break;
 
     default:

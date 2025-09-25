@@ -10,8 +10,8 @@
     <link href="https://fonts.cdnfonts.com/css/billabong" rel="stylesheet">
     <style>
         body {
-            background-color: #000;
-            color: #fff;
+            background-color: #ffffffff;
+            color: #020202ff;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
     </style>

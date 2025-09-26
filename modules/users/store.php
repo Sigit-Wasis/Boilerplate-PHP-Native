@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/../../models/User.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -7,11 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (createUser($name, $email)) {
         // sukses → redirect ke list user
+        $_SESSION['success'] = "User berhasil dibuat!";
         header("Location: /user");
         exit;
     } else {
-        echo "Gagal menyimpan user!";
+        $_SESSION['error'] = "Gagal menyimpan user!";
     }
 } else {
-    echo "Akses tidak valid!";
+    $_SESSION['error'] = "Akses tidak valid!";
 }

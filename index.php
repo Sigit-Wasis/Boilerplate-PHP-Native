@@ -53,27 +53,6 @@ switch ($request) {
         require_once __DIR__ . '/modules/users/delete.php';
         break;
 
-    // Modul post
-    case '/post':
-    case '/post/index':
-        require_once __DIR__ . '/modules/post/index.php';
-        break;
-    case '/post/create':
-        require_once __DIR__ . '/modules/post/create.php';
-        break;
-    case '/post/store': // aksi simpan post baru
-        require_once __DIR__ . '/modules/post/store.php';
-        break;
-    case '/post/edit':
-        require_once __DIR__ . '/modules/post/edit.php';
-        break;
-    case '/post/update': // aksi update post
-        require_once __DIR__ . '/modules/post/update.php';
-        break;
-    case '/post/delete':
-        require_once __DIR__ . '/modules/post/delete.php';
-        break;
-
     default:
         http_response_code(404);
         echo "Halaman tidak ditemukan!";

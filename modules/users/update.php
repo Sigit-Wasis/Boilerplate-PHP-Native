@@ -1,5 +1,11 @@
 <?php
+session_start();
 require_once __DIR__ . '/../../models/User.php';
+
+if (!isset($_SESSION['user'])) {
+    header("Location: /login");
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id    = $_POST['id'] ?? null;

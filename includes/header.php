@@ -259,6 +259,10 @@
     background: #f5f5f5;
     font-size: 14px;
 }
+
+
+
+
         </style>
 
 </head>
@@ -269,14 +273,14 @@
             <div class="logo">Instagram</div>
             
             <nav class="flex-grow-1">
-                <a href="#" class="nav-item"><i class="fas fa-home"></i>Home</a>
+                <a href="/home/index" class="nav-item"><i class="fas fa-home"></i>Home</a>
                 <a href="#" class="nav-item"><i class="fas fa-search"></i>Search</a>
                 <a href="#" class="nav-item"><i class="far fa-compass"></i>Explore</a>
                 <a href="#" class="nav-item"><i class="fas fa-video"></i>Reels</a>
                 <a href="#" class="nav-item position-relative"><i class="far fa-comment"></i>Messages <span class="notification-dot"></span></a>
                 <a href="#" class="nav-item position-relative"><i class="far fa-heart"></i>Notifications <span class="notification-dot"></span></a>
                 <a href="#" class="nav-item"><i class="far fa-plus-square"></i>Create</a>
-                <a href="#" class="nav-item"><i class="far fa-user"></i>Profile</a>
+                <a href="/profil" class="nav-item"><i class="far fa-user"></i>Profile</a>
             </nav>
             
             <div class="mt-auto">

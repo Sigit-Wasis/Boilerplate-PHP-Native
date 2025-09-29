@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 245px;
+            background-color: #000;
+            border-right: 1px solid #262626;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .logo {
+            padding: 25px 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            font-family: 'Billabong', cursive;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-item {
+            margin: 5px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 0 8px;
+            transition: background-color 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 16px;
+            fill: currentColor;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 245px;
+            flex: 1;
+            display: flex;
+            gap: 30px;
+            padding: 20px;
+            max-width: 975px;
+            margin-left: 245px;
+            margin-right: auto;
+        }
+
+        .feed {
+            flex: 1;
+            max-width: 470px;
+        }
+
+        /* Stories */
+        .stories {
+            display: flex;
+            gap: 15px;
+            padding: 20px 0;
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        .story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 66px;
+            cursor: pointer;
+        }
+
+        .story-img {
+            width: 66px;
+            height: 66px;
+            border-radius: 50%;
+            padding: 2px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            margin-bottom: 6px;
+        }
+
+        .story-img img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #000;
+            object-fit: cover;
+        }
+
+        .story-username {
+            font-size: 12px;
+            color: white;
+            max-width: 66px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Post */
+        .post {
+            background-color: #000;
+            border: 1px solid #262626;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+        }
+
+        .post-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .post-username {
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+
+        .post-time {
+            color: #8e8e8e;
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        .post-options {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .post-content {
+            background-color: #262626;
+            padding: 16px;
+            margin: 0 16px 16px;
+            border-radius: 8px;
+        }
+
+        .post-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #8e8e8e;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .post-video {
+            width: 100%;
+            height: 200px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8e8e8e;
+        }
+
+        /* Sidebar Right */
+        .sidebar-right {
+            width: 320px;
+            padding-left: 30px;
+        }
+
+        .profile-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .profile-details h4 {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-details p {
+            color: #8e8e8e;
+            font-size: 14px;
+        }
+
+        .switch-btn {
+            color: #0095f6;
+            background: none;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .suggestions {
+            margin-bottom: 24px;
+        }
+
+        .suggestions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .suggestions-title {
+            color: #8e8e8e;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .see-all {
+            color: white;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .suggestion-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .suggestion-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .suggestion-details h5 {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .suggestion-details p {
+            color: #8e8e8e;
+            font-size: 12px;
+        }
+
+        .follow-btn {
+            color: #0095f6;
+            background: none;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .footer {
+            color: #8e8e8e;
+            font-size: 11px;
+            line-height: 13px;
+        }
+
+        .footer-links {
+            margin-bottom: 16px;
+        }
+
+        .footer-links a {
+            color: #8e8e8e;
+            text-decoration: none;
+            margin-right: 4px;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #262626;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8e8e8e;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">Instagram</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 24 24">
+                                <path d="M9.005 16.545a2.997 2.997 0 0 1 2.997-2.997A2.997 2.997 0 0 1 15 16.545V22h7V11.543L12 2 2 11.543V22h7.005Z" fill="currentColor"/>
+                            </svg>
+                            Beranda
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 24 24">
+                                <path d="M19 10.5A8.5 8.5 0 1 1 10.5 2a8.5 8.5 0 0 1 8.5 8.5Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Cari
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 24 24">
+                                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Jelajahi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 24 24">
+                                <path d="M15.5 4H14.71l-.29-.29A.996.996 0 0 0 13.71 3.5H10.3a.996.996 0 0 0-.71.29L9.29 4H8.5A1.5 1.5 0 0 0 7 5.5v13A1.5 1.5 0 0 0 8.5 20h7a1.5 1.5 0 0 0 1.5-1.5v-13A1.5 1.5 0 0 0 15.5 4Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <path d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Reels
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 24 24">
+                                <path d="M12.003 2.001a9.705 9.705 0 1 1 0 19.4 10.876 10.876 0 0 1-2.895-.384.798.798 0 0 0-.533.04l-1.984.876a.801.801 0 0 1-1.123-.708l-.054-1.78a.806.806 0 0 0-.27-.569 9.49 9.49 0 0 1-3.14-7.175 9.65 9.65 0 0 1 10-9.7Z" fill="currentColor"/>
+                                <path d="M7.98 9.75c-.464 0-.75.327-.75.75s.286.75.75.75h8.04c.464 0 .75-.327.75-.75s-.286-.75-.75-.75H7.98Zm0 2.445c-.464 0-.75.328-.75.75 0 .423.286.75.75.75H12c.464 0 .75-.327.75-.75 0-.422-.286-.75-.75-.75H7.98Z" fill="#000"/>
+                            </svg>
+                            Pesan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 24 24">
+                                <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Notifikasi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 24 24">
+                                <path d="M12 2a10 10 0 1 0 10 10A10.016 10.016 0 0 0 12 2Zm0 15a1.5 1.5 0 1 1 1.5-1.5A1.5 1.5 0 0 1 12 17Zm1.5-6.5a1.5 1.5 0 0 1-3 0V8a1.5 1.5 0 0 1 3 0Z" fill="currentColor"/>
+                            </svg>
+                            Buat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <div class="nav-icon" style="width: 24px; height: 24px; border-radius: 50%; background-color: #8e8e8e;"></div>
+                            Profil
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="feed">
+                <!-- Stories -->
+                <div class="stories">
+                    <div class="story">
+                        <div class="story-img">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face" alt="braandoce">
+                        </div>
+                        <span class="story-username">wellysaverdalena</span>
+                    </div>
+                    <div class="story">
+                        <div class="story-img">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616c28ca2c1?w=100&h=100&fit=crop&crop=face" alt="dumphileee">
+                        </div>
+                        <span class="story-username">_dwiirhma</span>
+                    </div>
+                    <div class="story">
+                        <div class="story-img">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="arinassj">
+                        </div>
+                        <span class="story-username">stanngsh</span>
+                    </div>
+                    <div class="story">
+                        <div class="story-img">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="treevalcy">
+                        </div>
+                        <span class="story-username">treevalcy</span>
+                    </div>
+                    <div class="story">
+                        <div class="story-img">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face" alt="memoriw_">
+                        </div>
+                        <span class="story-username">memoriw_</span>
+                    </div>
+                    <div class="story">
+                        <div class="story-img">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="my2ndpag">
+                        </div>
+                        <span class="story-username">my2ndpag...</span>
+                    </div>
+                </div>
+
+                <!-- Post -->
+                <div class="post">
+                    <div class="post-header">
+                        <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=32&h=32&fit=crop&crop=face" alt="lambe_turah" class="post-avatar">
+                        <a href="#" class="post-username">lambe_turah</a>
+                        <span class="post-time">• 4 jam</span>
+                        <button class="post-options">⋯</button>
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title">Viral Puluhan Siswi SMP di Kendari Diduga Pesta Tembakau Sintetis, Polisi Langsung Turun Tangan</h3>
+                        <div class="post-meta">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=16&h=16&fit=crop&crop=face" alt="Admin" style="width: 16px; height: 16px; border-radius: 50%; margin-right: 4px;">
+                            <span>Admin</span>
+                            <span>September 24, 2025 - 08:04</span>
+                            <span style="margin-left: auto;">0</span>
+                        </div>
+                        <div class="post-video">
+                            <span>📹 Video Content</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="sidebar-right">
+                <div class="profile-switch">
+                    <div class="profile-info">
+                        <form id="formProfilePic" enctype="multipart/form-data">
+                            <label for="profilePicInput" style="cursor:pointer;">
+                                <img id="profileAvatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=56&h=56&fit=crop&crop=face" alt="wellysaverdalena" class="profile-avatar">
+                            </label>
+                            <input type="file" id="profilePicInput" name="profile_pic" accept="image/*" style="display:none;">
+                        </form>
+                        <div class="profile-details">
+                            <h4>wellysaverdalena</h4>
+                            <p>Disarankan untuk Anda</p>
+                        </div>
+                    </div>
+                    <button class="switch-btn">Alihkan</button>
+                </div>
+
+                <div class="suggestions">
+                    <div class="suggestions-header">
+                        <h3 class="suggestions-title">Disarankan untuk Anda</h3>
+                        <a href="#" class="see-all">Lihat Semua</a>
+                    </div>
+                    
+                    <div class="suggestion-item">
+                        <div class="suggestion-info">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616c28ca2c1?w=32&h=32&fit=crop&crop=face" alt="anriesaluli_f" class="suggestion-avatar">
+                            <div class="suggestion-details">
+                                <h5>anriesaluli_f</h5>
+                                <p>Diikuti oleh ansdkma_06</p>
+                            </div>
+                        </div>
+                        <button class="follow-btn">Ikuti</button>
+                    </div>
+
+                    <div class="suggestion-item">
+                        <div class="suggestion-info">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=32&h=32&fit=crop&crop=face" alt="pais.com13" class="suggestion-avatar">
+                            <div class="suggestion-details">
+                                <h5>pais.com13</h5>
+                                <p>Disarankan untuk Anda</p>
+                            </div>
+                        </div>
+                        <button class="follow-btn">Ikuti</button>
+                    </div>
+
+                    <div class="suggestion-item">
+                        <div class="suggestion-info">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face" alt="ambience.star" class="suggestion-avatar">
+                            <div class="suggestion-details">
+                                <h5>ambience.star</h5>
+                                <p>Disarankan untuk Anda</p>
+                            </div>
+                        </div>
+                        <button class="follow-btn">Ikuti</button>
+                    </div>
+
+                    <div class="suggestion-item">
+                        <div class="suggestion-info">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" alt="_arakball73" class="suggestion-avatar">
+                            <div class="suggestion-details">
+                                <h5>_arakball73</h5>
+                                <p>Diikuti oleh mamanx_x</p>
+                            </div>
+                        </div>
+                        <button class="follow-btn">Ikuti</button>
+                    </div>
+
+                    <div class="suggestion-item">
+                        <div class="suggestion-info">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face" alt="eugkoit" class="suggestion-avatar">
+                            <div class="suggestion-details">
+                                <h5>eugkoit</h5>
+                                <p>Diikuti oleh fajridn_</p>
+                            </div>
+                        </div>
+                        <button class="follow-btn">Ikuti</button>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <div class="footer-links">
+                        <a href="#">Tentang</a> • 
+                        <a href="#">Bantuan</a> • 
+                        <a href="#">Pers</a> • 
+                        <a href="#">API</a> • 
+                        <a href="#">Pekerjaan</a> • 
+                        <a href="#">Privasi</a> • 
+                        <a href="#">Ketentuan</a> • 
+                        <a href="#">Lokasi</a> • 
+                        <a href="#">Bahasa</a> • 
+                        <a href="#">Verifikasi Meta</a>
+                    </div>
+                    <p>© 2025 INSTAGRAM FROM META</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Simple interactions
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                // Add active class to clicked link
+                link.classList.add('active');
+            });
+        });
+
+        // Story click interaction
+        document.querySelectorAll('.story').forEach(story => {
+            story.addEventListener('click', () => {
+                story.style.opacity = '0.7';
+                setTimeout(() => {
+                    story.style.opacity = '1';
+                }, 200);
+            });
+        });
+
+        // Follow button interaction
+        document.querySelectorAll('.follow-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.textContent === 'Ikuti') {
+                    btn.textContent = 'Mengikuti';
+                    btn.style.color = '#8e8e8e';
+                } else {
+                    btn.textContent = 'Ikuti';
+                    btn.style.color = '#0095f6';
+                }
+            });
+        });
+
+        document.getElementById('profilePicInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            document.getElementById('profileAvatar').src = ev.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});
+    </script>
+</body>
+</html>

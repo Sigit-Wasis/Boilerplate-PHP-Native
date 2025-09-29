@@ -1,9 +1,15 @@
 <?php
+session_start();
 // Tampilkan header
 require_once __DIR__. '/../../includes/header.php';
 //call modal post
 require_once __DIR__. '/../../models/Post.php';
 
+// Cek apakah user sudah login
+if (!isset($_SESSION['user'])) {
+    header("Location: /login");
+    exit;
+}
 // Ambil semua post
 $posts = getAllPosts();
 
@@ -22,7 +28,7 @@ $posts = getAllPosts();
                 </div>
                 <div class="col-md-8">
                     <div class="d-flex align-items-center mb-3">
-                        <h1 class="h4 me-4 mb-0">Wellysaverdalena</h1>
+                        <h1 class="h4 me-4 mb-0"><?= htmlspecialchars($_SESSION['user']['nama_lengkap'] ?? '-') ?></h1>
                         <button class="btn btn-follow me-2">Edit profil</button>
                         <button class="btn btn-message me-2">View archive</button>
                         <i class="fas fa-cog ms-3" style ="font-size: 24px; cursor: pointer;"></i>

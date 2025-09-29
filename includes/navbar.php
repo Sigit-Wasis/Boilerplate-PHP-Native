@@ -33,4 +33,12 @@
         </form>
         </div>
     </div>
+    <div class="sidebar">
+  <h3 class="text-white">Instagram Clone</h3>
+  <ul class="nav flex-column mt-4">
+    <li class="nav-item"><a href="/index.php" class="nav-link text-white">🏠 Beranda</a></li>
+    <li class="nav-item"><a href="/post/create" class="nav-link text-white">➕ Buat Post</a></li>
+    <li class="nav-item"><a href="#" class="nav-link text-white">👤 Profil</a></li>
+  </ul>
+</div>
 </nav>

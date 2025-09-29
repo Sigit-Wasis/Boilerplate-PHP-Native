@@ -231,7 +231,7 @@
       <section class="card-login" aria-labelledby="login-title">
         <h1 id="login-title" class="logo">Instagram</h1>
 
-        <form action="/login/auth" method="POST">
+        <form action="/login/proses" method="POST">
           <input id="user" name="email" type="text" placeholder="Nomor telepon, nama pengguna, atau email" required>
           <input id="pass" name="password" type="password" placeholder="Kata sandi" required>
           <button class="primary" type="submit">Masuk</button>

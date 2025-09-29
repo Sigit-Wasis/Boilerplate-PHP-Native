@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/config/database.php';
+//  require_once 'modules/instagram/instagram.php';
+   
 
 $request = $_SERVER['REQUEST_URI'];
 $request = parse_url($request, PHP_URL_PATH);
@@ -17,8 +19,13 @@ switch ($request) {
     case '/login/index':
         require_once __DIR__ . '/modules/login/index.php';
         break;
-    case '/login/auth':
-        require_once __DIR__ . '/modules/login/auth.php';
+    case '/login/proses':
+        require_once __DIR__ . '/modules/login/proses.php';
+        break;
+        
+    // Modul Logout
+    case '/logout':
+        require_once __DIR__ . '/modules/login/logout.php';
         break;
 
     // Modul User
@@ -75,14 +82,19 @@ switch ($request) {
         require_once __DIR__ . '/models/like.php';
         break;
 
-     case '/profil':
+    case '/profil':
     case '/profil/index':
         require_once __DIR__ . '/modules/profil/index.php';
+        break;
+
+    case '/home':
+    case '/home/index':
+        require_once __DIR__ . '/modules/home/index.php';
         break;
 
     default:
         http_response_code(404);
         echo "Halaman tidak ditemukan!";
-        break;
+        break;   
 }
 ?>

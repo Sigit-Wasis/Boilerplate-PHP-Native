@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 require_once __DIR__ . '/../../models/Post.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -38,8 +41,10 @@ if (!empty($_FILES['images']['name'][0])) {
     }
 }
 
+$user_id =$_SESSION['user']['id']; //ambil user_id dari session
+
 // simpan ke DB lewat model
-createPostWithImages($caption, $uploadedFiles);
+createPostWithImages($caption,$user_id,$uploadedFiles);
 
 
     header("Location: /profil");

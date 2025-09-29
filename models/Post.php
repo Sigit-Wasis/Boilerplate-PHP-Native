@@ -2,10 +2,8 @@
 require_once __DIR__ . '/../config/database.php';
 
 // CREATE POST DENGAN 1 IMAGE (tanpa looping)
-function createPostWithImages($caption, $images = []) {
+function createPostWithImages($caption,$user_id, $images = []) {
     $conn = getDBConnection();
-
-    $user_id = 1; // contoh user_id, sesuaikan dengan sesi login
 
     // 1. Insert ke table posts
     $sqlPost = "INSERT INTO posts (caption, user_id, created_at) VALUES (?, ?, NOW())"; 
@@ -70,7 +68,7 @@ function createPostWithImages($caption, $images = []) {
 // GET POST beserta 1 gambar
 function getAllPosts() {
     $conn = getDBConnection();
-    $sql = "SELECT p.id AS id_post, p.caption, p.created_at, u.username,
+    $sql = "SELECT p.id AS id_post, p.caption, p.created_at, u.username, u.nama_lengkap,
                    m.id AS id_image, m.file
             FROM posts p
             JOIN users u ON p.user_id = u.id
@@ -86,6 +84,7 @@ function getAllPosts() {
             'caption'    => $row['caption'],
             'created_at' => $row['created_at'],
             'username'   => $row['username'],
+            'nama_lengkap' => $row['nama_lengkap'],
             'image'      => $row['file'] ?? null // cuma 1 gambar
         ];
     }

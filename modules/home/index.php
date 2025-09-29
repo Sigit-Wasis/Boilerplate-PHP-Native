@@ -258,7 +258,7 @@ function renderFeedSection($posts, $stories) {
                         <!-- Post Header -->
                         <div class="post-header">
                             <img src="<?= htmlspecialchars($post['avatar'] ?? 'public/img/gambar3.jpg') ?>" alt="<?= htmlspecialchars($post['username']) ?>" class="post-avatar">
-                            <a href="#" class="post-username"><?= htmlspecialchars($post['username']) ?></a>
+                            <a href="#" class="post-username"><?= htmlspecialchars($post['nama_lengkap']) ?></a>
                             <span class="post-time"><?= date('j M', strtotime($post['created_at'] ?? 'now')) ?></span>
                             <button class="post-options">⋯</button>
                         </div>
@@ -317,7 +317,7 @@ function renderRightSidebar($suggestions) {
                     <input type="file" id="profilePicInput" name="profile_pic" accept="image/*" style="display:none;">
                 </form>
                 <div class="profile-details">
-                    <h4>wellysaverdalena</h4>
+                    <h6>wellysaverdalena</h6>
                 </div>
             </div>
             <button class="switch-btn">Alihkan</button>
@@ -334,7 +334,7 @@ function renderRightSidebar($suggestions) {
                 <div class="suggestion-info">
                     <img src="<?php echo $suggestion['avatar']; ?>" alt="<?php echo $suggestion['username']; ?>" class="suggestion-avatar">
                     <div class="suggestion-details">
-                        <h5><?php echo $suggestion['username']; ?></h5>
+                        <h6><?php echo $suggestion['username']; ?></h6>
                         <p><?php echo $suggestion['mutual']; ?></p>
                     </div>
                 </div>
@@ -1231,7 +1231,7 @@ function renderRightSidebar($suggestions) {
         .suggestions-title {
             font-weight: 600;
             color: #ffffff;
-            font-size: 13px; 
+            font-size: 11px; 
             letter-spacing: 0.2px;
         }
 

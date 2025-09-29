@@ -377,590 +377,450 @@ function renderRightSidebar($suggestions) {
     <!-- <script src="modules/home/instagram.js"></script> -->
 </div>
      <script>
-        // Story data from PHP
-        const storiesData = <?= json_encode($stories) ?>;
-        let currentUserIndex = 0;
-        let currentStoryIndex = 0;
-        let storyTimer;
-        let progressTimer;
-        let currentTextColor = 'white';
-        let currentTextSize = 18;
-        let currentTextStyle = 'classic';
-        let draggedElement = null;
-        let textElements = [];
-        let storyPrivacy = 'public'; // public or close_friends
 
-        // Story Tools Functions
-        function toggleBoomerang() {
-            // Toggle boomerang effect (placeholder)
-            const btn = event.target;
-            btn.classList.toggle('active');
-        }
-
-        function addText() {
-            const textInput = document.getElementById('storyTextInputBottom');
-            const isVisible = textInput.style.display !== 'none';
-            
-            if (isVisible) {
-                textInput.style.display = 'none';
-                document.getElementById('textToolBtn').classList.remove('active');
-            } else {
-                textInput.style.display = 'block';
-                document.getElementById('textToolBtn').classList.add('active');
-                document.getElementById('storyTextInput').focus();
-            }
-        }
-
-        function addSticker() {
-            // Add sticker functionality (placeholder)
-            alert('Fitur sticker akan segera hadir!');
-        }
-
-        function addMusic() {
-            // Add music functionality (placeholder)
-            alert('Fitur musik akan segera hadir!');
-        }
-
-        function addSparkles() {
-            // Add sparkles effect (placeholder)
-            alert('Fitur efek akan segera hadir!');
-        }
-
-        function showMoreTools() {
-            // Show more tools (placeholder)
-            alert('Lebih banyak tools akan segera hadir!');
-        }
-
-        function changeTextStyle(style) {
-            currentTextStyle = style;
-            
-            // Update active button
-            document.querySelectorAll('.text-style-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector([data-style="${style}"]).classList.add('active');
-        }
-
-        function addTextToStory() {
-            const textInput = document.getElementById('storyTextInput');
-            const text = textInput.value.trim();
-            
-            if (text) {
-                createDraggableText(text);
-                textInput.value = '';
-                document.getElementById('storyTextInputBottom').style.display = 'none';
-                document.getElementById('textToolBtn').classList.remove('active');
-            }
-        }
-
-        function createDraggableText(text) {
-            const textElement = document.createElement('div');
-            textElement.className = draggable-text ${currentTextStyle};
-            textElement.textContent = text;
-            textElement.style.color = currentTextColor;
-            textElement.style.fontSize = currentTextSize + 'px';
-            textElement.style.left = '50%';
-            textElement.style.top = '50%';
-            
-            // Make draggable
-            textElement.addEventListener('mousedown', startDragging);
-            textElement.addEventListener('touchstart', startDragging);
-            
-            // Double click to edit
-            textElement.addEventListener('dblclick', editText);
-            
-            document.getElementById('draggableElements').appendChild(textElement);
-            textElements.push(textElement);
-        }
-
-        function startDragging(e) {
-            draggedElement = e.target;
-            const rect = draggedElement.getBoundingClientRect();
-            const containerRect = document.querySelector('.preview-content').getBoundingClientRect();
-            
-            const startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
-            const startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
-            
-            function drag(e) {
-                const currentX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
-                const currentY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
-                
-                const deltaX = currentX - startX;
-                const deltaY = currentY - startY;
-                
-                const newLeft = ((rect.left + deltaX - containerRect.left) / containerRect.width) * 100;
-                const newTop = ((rect.top + deltaY - containerRect.top) / containerRect.height) * 100;
-                
-                draggedElement.style.left = Math.max(10, Math.min(90, newLeft)) + '%';
-                draggedElement.style.top = Math.max(10, Math.min(90, newTop)) + '%';
-            }
-            
-            function stopDragging() {
-                document.removeEventListener('mousemove', drag);
-                document.removeEventListener('mouseup', stopDragging);
-                document.removeEventListener('touchmove', drag);
-                document.removeEventListener('touchend', stopDragging);
-                draggedElement = null;
-            }
-            
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', stopDragging);
-            document.addEventListener('touchmove', drag);
-            document.addEventListener('touchend', stopDragging);
-        }
-
-        function editText(e) {
-            const element = e.target;
-            const currentText = element.textContent;
-            const newText = prompt('Edit teks:', currentText);
-            if (newText !== null && newText.trim()) {
-                element.textContent = newText.trim();
-            }
-        }
-
-        // Color picker functionality
+        // Membungkus semua kode di dalam DOMContentLoaded untuk memastikan semua elemen HTML siap
         document.addEventListener('DOMContentLoaded', function() {
+            // Story data from PHP
+            const storiesData = <?= json_encode($stories) ?>;
+            let currentUserIndex = 0;
+            let currentStoryIndex = 0;
+            let storyTimer;
+            let progressTimer;
+            let currentTextColor = 'white';
+            let currentTextSize = 18;
+            let currentTextStyle = 'classic';
+            let draggedElement = null;
+            let textElements = [];
+            let storyPrivacy = 'public'; // public or close_friends
+
+            // Story Tools Functions
+            window.toggleBoomerang = function() {
+                // Toggle boomerang effect (placeholder)
+                const btn = event.target;
+                btn.classList.toggle('active');
+            }
+
+            window.addText = function() {
+                const textInput = document.getElementById('storyTextInputBottom');
+                const isVisible = textInput.style.display !== 'none';
+                
+                if (isVisible) {
+                    textInput.style.display = 'none';
+                    document.getElementById('textToolBtn').classList.remove('active');
+                } else {
+                    textInput.style.display = 'block';
+                    document.getElementById('textToolBtn').classList.add('active');
+                    document.getElementById('storyTextInput').focus();
+                }
+            }
+
+            window.addSticker = function() {
+                alert('Fitur sticker akan segera hadir!');
+            }
+
+            window.addMusic = function() {
+                alert('Fitur musik akan segera hadir!');
+            }
+
+            window.addSparkles = function() {
+                alert('Fitur efek akan segera hadir!');
+            }
+
+            window.showMoreTools = function() {
+                alert('Lebih banyak tools akan segera hadir!');
+            }
+
+            window.changeTextStyle = function(style) {
+                currentTextStyle = style;
+                
+                // Update active button
+                document.querySelectorAll('.text-style-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                // PERBAIKAN: Menggunakan template literal untuk querySelector yang benar
+                document.querySelector(`[data-style="${style}"]`).classList.add('active');
+            }
+
+            window.addTextToStory = function() {
+                const textInput = document.getElementById('storyTextInput');
+                const text = textInput.value.trim();
+                
+                if (text) {
+                    createDraggableText(text);
+                    textInput.value = '';
+                    document.getElementById('storyTextInputBottom').style.display = 'none';
+                    document.getElementById('textToolBtn').classList.remove('active');
+                }
+            }
+
+            function createDraggableText(text) {
+                const textElement = document.createElement('div');
+                // PERBAIKAN: Menggunakan template literal untuk className
+                textElement.className = `draggable-text ${currentTextStyle}`;
+                textElement.textContent = text;
+                textElement.style.color = currentTextColor;
+                textElement.style.fontSize = currentTextSize + 'px';
+                textElement.style.left = '50%';
+                textElement.style.top = '50%';
+                
+                textElement.addEventListener('mousedown', startDragging);
+                textElement.addEventListener('touchstart', startDragging);
+                textElement.addEventListener('dblclick', editText);
+                
+                document.getElementById('draggableElements').appendChild(textElement);
+                textElements.push(textElement);
+            }
+
+            function startDragging(e) {
+                draggedElement = e.target;
+                const rect = draggedElement.getBoundingClientRect();
+                const containerRect = document.querySelector('.preview-content').getBoundingClientRect();
+                
+                const startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+                const startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+                
+                function drag(ev) {
+                    const currentX = ev.type === 'mousemove' ? ev.clientX : ev.touches[0].clientX;
+                    const currentY = ev.type === 'mousemove' ? ev.clientY : ev.touches[0].clientY;
+                    
+                    const deltaX = currentX - startX;
+                    const deltaY = currentY - startY;
+                    
+                    const newLeft = ((rect.left + deltaX - containerRect.left) / containerRect.width) * 100;
+                    const newTop = ((rect.top + deltaY - containerRect.top) / containerRect.height) * 100;
+                    
+                    draggedElement.style.left = Math.max(10, Math.min(90, newLeft)) + '%';
+                    draggedElement.style.top = Math.max(10, Math.min(90, newTop)) + '%';
+                }
+                
+                function stopDragging() {
+                    document.removeEventListener('mousemove', drag);
+                    document.removeEventListener('mouseup', stopDragging);
+                    document.removeEventListener('touchmove', drag);
+                    document.removeEventListener('touchend', stopDragging);
+                    draggedElement = null;
+                }
+                
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('mouseup', stopDragging);
+                document.addEventListener('touchmove', drag);
+                document.addEventListener('touchend', stopDragging);
+            }
+
+            function editText(e) {
+                const element = e.target;
+                const currentText = element.textContent;
+                const newText = prompt('Edit teks:', currentText);
+                if (newText !== null && newText.trim()) {
+                    element.textContent = newText.trim();
+                }
+            }
+
             document.querySelectorAll('.color-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     currentTextColor = this.dataset.color;
-                    
-                    // Update active color
                     document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                 });
             });
-        });
 
-        function saveStoryDraft() {
-            // Save story as draft (placeholder)
-            alert('Story disimpan sebagai draft!');
-        }
-
-        function toggleStoryPrivacy() {
-            const btn = document.getElementById('privacyBtn');
-            if (storyPrivacy === 'public') {
-                storyPrivacy = 'close_friends';
-                btn.innerHTML = '<span class="btn-icon">👥</span>';
-                btn.style.background = '#00d924';
-            } else {
-                storyPrivacy = 'public';
-                btn.innerHTML = '<span class="btn-icon">👁</span>';
-                btn.style.background = 'rgba(0, 0, 0, 0.5)';
-            }
-        }
-
-        function shareToStory(type) {
-            // Collect all text elements data
-            const storyData = {
-                image: document.getElementById('previewImage').src,
-                textElements: textElements.map(el => ({
-                    text: el.textContent,
-                    left: el.style.left,
-                    top: el.style.top,
-                    color: el.style.color,
-                    fontSize: el.style.fontSize,
-                    className: el.className
-                })),
-                type: type
-            };
-            
-            // Add to stories data
-            const currentUser = storiesData[0];
-            const newStory = {
-                image: storyData.image,
-                timestamp: 'Sekarang',
-                textElements: storyData.textElements,
-                type: type
-            };
-            
-            if (!currentUser.stories) {
-                currentUser.stories = [];
-            }
-            
-            currentUser.stories.unshift(newStory);
-            currentUser.has_story = true;
-            
-            // Update UI
-            updateCurrentUserStoryRing();
-            
-            // Close modal and show success
-            closeAddStory();
-            showSuccessModal();
-        }
-
-        function showSendStoryModal() {
-            alert('Fitur kirim story ke teman akan segera hadir!');
-        }
-
-        // Add Story Functions
-        function openAddStory() {
-            const modal = document.getElementById('addStoryModal');
-            modal.classList.add('active');
-            setupDragAndDrop();
-        }
-
-        function closeAddStory() {
-            const modal = document.getElementById('addStoryModal');
-            modal.classList.remove('active');
-            
-            // Reset form
-            document.getElementById('photoUploadArea').style.display = 'flex';
-            document.getElementById('storyPreview').style.display = 'none';
-            document.getElementById('storyPhotoInput').value = '';
-            document.getElementById('storyTextInputBottom').style.display = 'none';
-            document.getElementById('textToolBtn').classList.remove('active');
-            
-            // Reset text elements
-            textElements = [];
-            document.getElementById('draggableElements').innerHTML = '';
-            
-            // Reset privacy
-            storyPrivacy = 'public';
-            const privacyBtn = document.getElementById('privacyBtn');
-            if (privacyBtn) {
-                privacyBtn.innerHTML = '<span class="btn-icon">👁</span>';
-                privacyBtn.style.background = 'rgba(0, 0, 0, 0.5)';
-            }
-        }
-
-        function setupDragAndDrop() {
-            const uploadArea = document.getElementById('photoUploadArea');
-            
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                uploadArea.addEventListener(eventName, preventDefaults, false);
-            });
-
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
+            window.saveStoryDraft = function() {
+                alert('Story disimpan sebagai draft!');
             }
 
-            ['dragenter', 'dragover'].forEach(eventName => {
-                uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
-            });
-
-            ['dragleave', 'drop'].forEach(eventName => {
-                uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
-            });
-
-            uploadArea.addEventListener('drop', handleDrop, false);
-        }
-
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            handleFiles(files);
-        }
-
-        function handleFiles(files) {
-            if (files.length > 0) {
-                const file = files[0];
-                if (file.type.startsWith('image/')) {
-                    displayImagePreview(file);
+            window.toggleStoryPrivacy = function() {
+                const btn = document.getElementById('privacyBtn');
+                if (storyPrivacy === 'public') {
+                    storyPrivacy = 'close_friends';
+                    btn.innerHTML = '<span class="btn-icon">👥</span>';
+                    btn.style.background = '#00d924';
+                } else {
+                    storyPrivacy = 'public';
+                    btn.innerHTML = '<span class="btn-icon">👁</span>';
+                    btn.style.background = 'rgba(0, 0, 0, 0.5)';
                 }
             }
-        }
 
-        function displayImagePreview(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('previewImage').src = e.target.result;
-                document.getElementById('photoUploadArea').style.display = 'none';
-                document.getElementById('storyPreview').style.display = 'block';
+            window.shareToStory = function(type) {
+                const storyData = {
+                    image: document.getElementById('previewImage').src,
+                    textElements: textElements.map(el => ({
+                        text: el.textContent,
+                        left: el.style.left,
+                        top: el.style.top,
+                        color: el.style.color,
+                        fontSize: el.style.fontSize,
+                        className: el.className
+                    })),
+                    type: type
+                };
                 
-                // Reset text elements
+                const currentUser = storiesData[0];
+                const newStory = {
+                    image: storyData.image,
+                    timestamp: 'Sekarang',
+                    textElements: storyData.textElements,
+                    type: type
+                };
+                
+                if (!currentUser.stories) currentUser.stories = [];
+                
+                currentUser.stories.unshift(newStory);
+                currentUser.has_story = true;
+                
+                updateCurrentUserStoryRing();
+                closeAddStory();
+                showSuccessModal();
+            }
+
+            window.showSendStoryModal = function() {
+                alert('Fitur kirim story ke teman akan segera hadir!');
+            }
+
+            window.openAddStory = function() {
+                document.getElementById('addStoryModal').classList.add('active');
+                setupDragAndDrop();
+            }
+
+            window.closeAddStory = function() {
+                const modal = document.getElementById('addStoryModal');
+                modal.classList.remove('active');
+                
+                document.getElementById('photoUploadArea').style.display = 'flex';
+                document.getElementById('storyPreview').style.display = 'none';
+                document.getElementById('storyPhotoInput').value = '';
+                document.getElementById('storyTextInputBottom').style.display = 'none';
+                document.getElementById('textToolBtn').classList.remove('active');
+                
                 textElements = [];
                 document.getElementById('draggableElements').innerHTML = '';
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Handle file input change
-        document.getElementById('storyPhotoInput').addEventListener('change', function(e) {
-            if (e.target.files.length > 0) {
-                displayImagePreview(e.target.files[0]);
-            }
-        });
-
-        function cancelStory() {
-            document.getElementById('photoUploadArea').style.display = 'flex';
-            document.getElementById('storyPreview').style.display = 'none';
-            document.getElementById('storyText').value = '';
-        }
-
-        function changeTextColor() {
-            const colors = ['white', '#ff3040', '#0095f6', '#00d924', '#ffcc00', '#ff6b35'];
-            const currentIndex = colors.indexOf(currentTextColor);
-            const nextIndex = (currentIndex + 1) % colors.length;
-            currentTextColor = colors[nextIndex];
-            
-            const textarea = document.getElementById('storyText');
-            textarea.style.color = currentTextColor;
-        }
-
-        function changeTextSize() {
-            const sizes = [18, 24, 30, 36];
-            const currentIndex = sizes.indexOf(currentTextSize);
-            const nextIndex = (currentIndex + 1) % sizes.length;
-            currentTextSize = sizes[nextIndex];
-            
-            const textarea = document.getElementById('storyText');
-            textarea.style.fontSize = currentTextSize + 'px';
-        }
-
-        function postStory() {
-            const imageData = document.getElementById('previewImage').src;
-            const storyText = document.getElementById('storyText').value;
-            
-            // Add new story to current user's stories
-            const currentUser = storiesData[0]; // First item is current user
-            const newStory = {
-                image: imageData,
-                timestamp: 'Sekarang',
-                text: storyText,
-                textColor: currentTextColor,
-                textSize: currentTextSize
-            };
-            
-            if (!currentUser.stories) {
-                currentUser.stories = [];
-            }
-            
-            currentUser.stories.unshift(newStory); // Add to beginning
-            currentUser.has_story = true;
-            
-            // Update UI
-            updateCurrentUserStoryRing();
-            
-            // Close add story modal
-            closeAddStory();
-            
-            // Show success modal
-            showSuccessModal();
-        }
-
-        function updateCurrentUserStoryRing() {
-            const currentUserElement = document.querySelector('[data-story-index="0"] .story-ring');
-            if (currentUserElement) {
-                currentUserElement.classList.remove('add-story');
-                currentUserElement.classList.add('has-story');
                 
-                // Change onclick to open story instead of add story
-                const highlightItem = currentUserElement.parentElement;
-                highlightItem.setAttribute('onclick', 'openStory(0)');
-                
-                // Update username text
-                const usernameElement = highlightItem.querySelector('.highlight-username');
-                usernameElement.textContent = 'wellysaverdalena';
-                
-                // Remove plus icon
-                const plusIcon = currentUserElement.querySelector('.add-story-plus');
-                if (plusIcon) {
-                    plusIcon.remove();
+                storyPrivacy = 'public';
+                const privacyBtn = document.getElementById('privacyBtn');
+                if (privacyBtn) {
+                    privacyBtn.innerHTML = '<span class="btn-icon">👁</span>';
+                    privacyBtn.style.background = 'rgba(0, 0, 0, 0.5)';
                 }
             }
-        }
 
-        function showSuccessModal() {
-            const modal = document.getElementById('storySuccessModal');
-            modal.classList.add('active');
-            
-            // Auto close after 3 seconds
-            setTimeout(() => {
-                closeSuccessModal();
-            }, 3000);
-        }
-
-        function closeSuccessModal() {
-            const modal = document.getElementById('storySuccessModal');
-            modal.classList.remove('active');
-        }
-
-        function openStory(userIndex) {
-            currentUserIndex = userIndex;
-            currentStoryIndex = 0;
-            
-            const modal = document.getElementById('storyModal');
-            modal.classList.add('active');
-            
-            // Mark story as viewed
-            const storyRing = document.querySelector([data-story-index="${userIndex}"] .story-ring);
-            if (storyRing) {
-                storyRing.classList.add('viewed');
-            }
-            
-            showStory();
-            document.addEventListener('keydown', handleKeyPress);
-        }
-
-        function closeStory() {
-            const modal = document.getElementById('storyModal');
-            modal.classList.remove('active');
-            
-            clearTimeout(storyTimer);
-            clearInterval(progressTimer);
-            document.removeEventListener('keydown', handleKeyPress);
-        }
-
-        function showStory() {
-            const user = storiesData[currentUserIndex];
-            const story = user.stories[currentStoryIndex];
-            
-            // Update story content
-            document.getElementById('storyUserAvatar').src = user.avatar;
-            document.getElementById('storyUsername').textContent = user.username;
-            document.getElementById('storyTimestamp').textContent = story.timestamp;
-            document.getElementById('storyImage').src = story.image;
-            
-            // Add text overlay if story has text
-            let textOverlay = document.querySelector('.story-text-display');
-            if (textOverlay) {
-                textOverlay.remove();
-            }
-            
-            if (story.text && story.text.trim() !== '') {
-                textOverlay = document.createElement('div');
-                textOverlay.className = 'story-text-display';
-                textOverlay.style.cssText = `
-                    position: absolute;
-                    bottom: 120px;
-                    left: 20px;
-                    right: 20px;
-                    text-align: center;
-                    font-size: ${story.textSize || 18}px;
-                    color: ${story.textColor || 'white'};
-                    font-weight: bold;
-                    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-                    z-index: 3;
-                    word-wrap: break-word;
-                `;
-                textOverlay.textContent = story.text;
-                document.querySelector('.story-content').appendChild(textOverlay);
-            }
-            
-            // Create progress bars
-            createProgressBars();
-            
-            // Start story timer
-            startStoryProgress();
-        }
-
-        function createProgressBars() {
-            const user = storiesData[currentUserIndex];
-            const progressContainer = document.querySelector('.story-progress-bars');
-            progressContainer.innerHTML = '';
-            
-            user.stories.forEach((_, index) => {
-                const progressBar = document.createElement('div');
-                progressBar.className = 'story-progress-bar';
+            function setupDragAndDrop() {
+                const uploadArea = document.getElementById('photoUploadArea');
                 
-                const progressFill = document.createElement('div');
-                progressFill.className = 'story-progress-fill';
-                
-                if (index < currentStoryIndex) {
-                    progressFill.style.width = '100%';
-                } else if (index === currentStoryIndex) {
-                    progressFill.style.width = '0%';
-                } else {
-                    progressFill.style.width = '0%';
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, preventDefaults, false);
+                });
+
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
-                
-                progressBar.appendChild(progressFill);
-                progressContainer.appendChild(progressBar);
+
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
+                });
+
+                uploadArea.addEventListener('drop', handleDrop, false);
+            }
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+
+            function handleFiles(files) {
+                if (files.length > 0 && files[0].type.startsWith('image/')) {
+                    displayImagePreview(files[0]);
+                }
+            }
+
+            function displayImagePreview(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImage').src = e.target.result;
+                    document.getElementById('photoUploadArea').style.display = 'none';
+                    document.getElementById('storyPreview').style.display = 'block';
+                    
+                    textElements = [];
+                    document.getElementById('draggableElements').innerHTML = '';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            document.getElementById('storyPhotoInput').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    displayImagePreview(e.target.files[0]);
+                }
             });
-        }
 
-        function startStoryProgress() {
-            clearTimeout(storyTimer);
-            clearInterval(progressTimer);
-            
-            const progressFill = document.querySelectorAll('.story-progress-fill')[currentStoryIndex];
-            let progress = 0;
-            const duration = 5000; // 5 seconds
-            const interval = 50; // Update every 50ms
-            const increment = (interval / duration) * 100;
-            
-            progressTimer = setInterval(() => {
-                progress += increment;
-                if (progressFill) {
-                    progressFill.style.width = Math.min(progress, 100) + '%';
+            function updateCurrentUserStoryRing() {
+                const currentUserElement = document.querySelector('[data-story-index="0"] .story-ring');
+                if (currentUserElement) {
+                    currentUserElement.classList.remove('add-story');
+                    currentUserElement.classList.add('has-story');
+                    
+                    const highlightItem = currentUserElement.parentElement;
+                    highlightItem.setAttribute('onclick', 'openStory(0)');
+                    
+                    const usernameElement = highlightItem.querySelector('.highlight-username');
+                    usernameElement.textContent = storiesData[0].username;
+                    
+                    const plusIcon = currentUserElement.querySelector('.add-story-plus');
+                    if (plusIcon) plusIcon.remove();
+                }
+            }
+
+            function showSuccessModal() {
+                document.getElementById('storySuccessModal').classList.add('active');
+                setTimeout(closeSuccessModal, 3000);
+            }
+
+            window.closeSuccessModal = function() {
+                document.getElementById('storySuccessModal').classList.remove('active');
+            }
+
+            window.openStory = function(userIndex) {
+                currentUserIndex = userIndex;
+                currentStoryIndex = 0;
+                
+                document.getElementById('storyModal').classList.add('active');
+                
+                // PERBAIKAN: Menggunakan template literal untuk querySelector yang benar
+                const storyRing = document.querySelector(`[data-story-index="${userIndex}"] .story-ring`);
+                if (storyRing) {
+                    storyRing.classList.add('viewed');
                 }
                 
-                if (progress >= 100) {
-                    clearInterval(progressTimer);
-                    nextStory();
-                }
-            }, interval);
-        }
-
-        function nextStory() {
-            const user = storiesData[currentUserIndex];
-            
-            if (currentStoryIndex < user.stories.length - 1) {
-                currentStoryIndex++;
                 showStory();
-            } else {
-                // Move to next user or close if last user
-                if (currentUserIndex < storiesData.length - 1) {
-                    currentUserIndex++;
-                    currentStoryIndex = 0;
-                    showStory();
-                } else {
-                    closeStory();
-                }
+                document.addEventListener('keydown', handleKeyPress);
             }
-        }
 
-        function previousStory() {
-            if (currentStoryIndex > 0) {
-                currentStoryIndex--;
-                showStory();
-            } else if (currentUserIndex > 0) {
-                currentUserIndex--;
+            window.closeStory = function() {
+                document.getElementById('storyModal').classList.remove('active');
+                clearTimeout(storyTimer);
+                clearInterval(progressTimer);
+                document.removeEventListener('keydown', handleKeyPress);
+            }
+
+            function showStory() {
                 const user = storiesData[currentUserIndex];
-                currentStoryIndex = user.stories.length - 1;
-                showStory();
-            }
-        }
-
-        function handleKeyPress(event) {
-            switch(event.key) {
-                case 'Escape':
+                if (!user || !user.stories || user.stories.length === 0) {
                     closeStory();
-                    break;
-                case 'ArrowLeft':
-                    previousStory();
-                    break;
-                case 'ArrowRight':
-                case ' ':
-                    event.preventDefault();
-                    nextStory();
-                    break;
-            }
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('storyModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeStory();
-            }
-        });
-
-        // Pause story on mouse hold
-        let isPaused = false;
-        document.querySelector('.story-container').addEventListener('mousedown', function() {
-            isPaused = true;
-            clearInterval(progressTimer);
-        });
-
-        document.querySelector('.story-container').addEventListener('mouseup', function() {
-            if (isPaused) {
-                isPaused = false;
+                    return;
+                }
+                const story = user.stories[currentStoryIndex];
+                
+                document.getElementById('storyUserAvatar').src = user.avatar;
+                document.getElementById('storyUsername').textContent = user.username;
+                document.getElementById('storyTimestamp').textContent = story.timestamp;
+                document.getElementById('storyImage').src = story.image;
+                
+                createProgressBars();
                 startStoryProgress();
             }
+
+            function createProgressBars() {
+                const user = storiesData[currentUserIndex];
+                const progressContainer = document.querySelector('.story-progress-bars');
+                progressContainer.innerHTML = '';
+                
+                user.stories.forEach((_, index) => {
+                    const progressBar = document.createElement('div');
+                    progressBar.className = 'story-progress-bar';
+                    const progressFill = document.createElement('div');
+                    progressFill.className = 'story-progress-fill';
+                    
+                    if (index < currentStoryIndex) {
+                        progressFill.style.width = '100%';
+                    }
+                    
+                    progressBar.appendChild(progressFill);
+                    progressContainer.appendChild(progressBar);
+                });
+            }
+
+            function startStoryProgress() {
+                clearTimeout(storyTimer);
+                clearInterval(progressTimer);
+                
+                const progressFillElements = document.querySelectorAll('.story-progress-fill');
+                if (progressFillElements.length <= currentStoryIndex) return;
+
+                const progressFill = progressFillElements[currentStoryIndex];
+                let progress = 0;
+                const duration = 5000;
+                const interval = 50;
+                const increment = (interval / duration) * 100;
+                
+                progressTimer = setInterval(() => {
+                    if (isPaused) return;
+                    progress += increment;
+                    progressFill.style.width = Math.min(progress, 100) + '%';
+                    
+                    if (progress >= 100) {
+                        clearInterval(progressTimer);
+                        nextStory();
+                    }
+                }, interval);
+            }
+
+            window.nextStory = function() {
+                const user = storiesData[currentUserIndex];
+                if (currentStoryIndex < user.stories.length - 1) {
+                    currentStoryIndex++;
+                    showStory();
+                } else {
+                    if (currentUserIndex < storiesData.length - 1) {
+                        currentUserIndex++;
+                        currentStoryIndex = 0;
+                        showStory();
+                    } else {
+                        closeStory();
+                    }
+                }
+            }
+
+            window.previousStory = function() {
+                if (currentStoryIndex > 0) {
+                    currentStoryIndex--;
+                    showStory();
+                } else if (currentUserIndex > 0) {
+                    currentUserIndex--;
+                    const user = storiesData[currentUserIndex];
+                    currentStoryIndex = user.stories ? user.stories.length - 1 : 0;
+                    showStory();
+                }
+            }
+
+            function handleKeyPress(event) {
+                switch(event.key) {
+                    case 'Escape': closeStory(); break;
+                    case 'ArrowLeft': previousStory(); break;
+                    case 'ArrowRight': case ' ': event.preventDefault(); nextStory(); break;
+                }
+            }
+
+            document.getElementById('storyModal').addEventListener('click', function(e) {
+                if (e.target === this) closeStory();
+            });
+
+            document.querySelector('.story-container').addEventListener('mousedown', function() {
+                isPaused = true;
+            });
+
+            document.querySelector('.story-container').addEventListener('mouseup', function() {
+                isPaused = false;
+            });
+            document.querySelector('.story-container').addEventListener('mouseleave', function() {
+                isPaused = false;
+            });
         });
     </script>
 
-    <?php
+<?php
     require_once __DIR__ . '/../../includes/footer.php';
-    ?>
+?>

@@ -17,8 +17,12 @@ switch ($request) {
     case '/login/index':
         require_once __DIR__ . '/modules/login/index.php';
         break;
-    case '/login/auth':
-        require_once __DIR__ . '/modules/login/auth.php';
+    case '/login/proses': // aksi proses login 
+        require_once __DIR__ . '/modules/login/proses.php';
+        break;
+        case '/logout':
+    case '/logout/index':
+        require_once __DIR__ . '/modules/logout/index.php';
         break;
 
     // Modul User
@@ -80,6 +84,16 @@ switch ($request) {
         require_once __DIR__ . '/modules/profil/index.php';
         break;
 
+    case '/home':
+    case '/home/index':
+        require_once __DIR__ . '/modules/home/index.php';
+        break;
+
+    case '/story':
+    case '/story/insert':
+        require_once __DIR__ . '/modules/home/insert_story.php';
+        break;
+    
     default:
         http_response_code(404);
         echo "Halaman tidak ditemukan!";

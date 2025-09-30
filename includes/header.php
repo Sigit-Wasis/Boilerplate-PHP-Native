@@ -268,7 +268,7 @@
 </head>
 <body>
     <!-- Sidebar -->
-    <div class="sidebar">
+    <!-- <div class="sidebar">
         <div class="d-flex flex-column h-100">
             <div class="logo">Instagram</div>
             
@@ -287,4 +287,4 @@
                 <a href="#" class="nav-item"><i class="fas fa-bars"></i>More</a>
             </div>
         </div>
-    </div>
+    </div> -->

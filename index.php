@@ -92,6 +92,11 @@ switch ($request) {
         require_once __DIR__ . '/modules/home/index.php';
         break;
 
+    case '/highlight':
+    case '/highlight/store':
+        require_once __DIR__ . '/modules/highlight/store.php';
+        break;
+
     default:
         http_response_code(404);
         echo "Halaman tidak ditemukan!";

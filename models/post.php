@@ -1,28 +1,22 @@
 <?php
+
 require_once __DIR__ . '/../config/database.php';
 
 // CREATE POST DENGAN 1 IMAGE (tanpa looping)
-function createPostWithImages($caption, $images = []) {
+function createPostWithImages($caption, $user_id, $images = []) {
     $conn = getDBConnection();
-
-    $user_id = 1; // contoh user_id, sesuaikan dengan sesi login
 
     // 1. Insert ke table posts
     $sqlPost = "INSERT INTO posts (caption, user_id, created_at) VALUES (?, ?, NOW())"; 
     $stmtPost = $conn->prepare($sqlPost);
     if (!$stmtPost) {
-        die("Error prepare post: " . $conn->error);
+        throw new Exception("Error prepare post: " . $conn->error);
     }
 
     $stmtPost->bind_param("si", $caption, $user_id);
     $stmtPost->execute();
     $id_post = $conn->insert_id; // ambil ID dari koneksi, bukan statement
     $stmtPost->close();
-
-    echo "Post created with ID: " . $id_post . "<br>";
-    echo "Caption: " . htmlspecialchars($caption) . "<br>";
-    echo "User ID: " . $user_id . "<br>";
-    echo "Number of images: " . count($images) . "<br>";
 
     // 2. Kalau ada gambar, simpan semua dengan looping
     if (!empty($images)) {
@@ -32,7 +26,8 @@ function createPostWithImages($caption, $images = []) {
                 continue; // skip kalau datanya gak lengkap
             }
 
-            echo "Processing image: " . htmlspecialchars($img['file']) . "<br>";
+                error_log("Skipping image due to incomplete data: " . json_encode($img));
+                continue; // skip kalau datanya gak lengkap
 
             $file       = $img['file'];        // nama file unik
             $type_file  = $img['type_file'];   // mime type (misal image/jpeg)
@@ -43,18 +38,19 @@ function createPostWithImages($caption, $images = []) {
             $sqlImg = "INSERT INTO media (file, type_file, size, resolution) VALUES (?, ?, ?, ?)";
             $stmtImg = $conn->prepare($sqlImg);
             if (!$stmtImg) {
-                die("Error prepare image: " . $conn->error);
+                throw new Exception("Error prepare image: " . $conn->error);
             }
             $stmtImg->bind_param("ssis", $file, $type_file, $size, $resolution);
             $stmtImg->execute();
             $id_image = $conn->insert_id;
+            $stmtImg->close();
             $stmtImg->close();
 
             // Insert ke table pv_post_image
             $sqlPivot = "INSERT INTO pv_post_image (post_id, media_id) VALUES (?, ?)";
             $stmtPivot = $conn->prepare($sqlPivot);
             if (!$stmtPivot) {
-                die("Error prepare pivot: " . $conn->error);
+                throw new Exception("Error prepare pivot: " . $conn->error);
             }
             $stmtPivot->bind_param("ii", $id_post, $id_image);
             $stmtPivot->execute();
@@ -62,7 +58,6 @@ function createPostWithImages($caption, $images = []) {
         }
     }
 
-    $conn->close();
     return $id_post;
 }
 
@@ -71,25 +66,28 @@ function createPostWithImages($caption, $images = []) {
 function getAllPosts() {
     $conn = getDBConnection();
     $sql = "SELECT p.id AS id_post, p.caption, p.created_at, u.username,
-                   m.id AS id_image, m.file
+                m.id AS id_image, m.file
             FROM posts p
             JOIN users u ON p.user_id = u.id
             LEFT JOIN pv_post_image pi ON p.id = pi.post_id
             LEFT JOIN media m ON pi.media_id = m.id
             ORDER BY p.created_at DESC";
     $result = $conn->query($sql);
+    $result = $conn->query($sql);
 
     $posts = [];
-    while ($row = $result->fetch_assoc()) {
-        $posts[] = [
-            'id_post'    => $row['id_post'],
-            'caption'    => $row['caption'],
-            'created_at' => $row['created_at'],
-            'username'   => $row['username'],
-            'image'      => $row['file'] ?? null // cuma 1 gambar
-        ];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $posts[] = [
+                'id_post'    => $row['id_post'],
+                'caption'    => $row['caption'],
+                'created_at' => $row['created_at'],
+                'username'   => $row['username'],
+                'image'      => $row['file'] ?? null // cuma 1 gambar
+            ];
+        }
+        $result->free();
     }
     $conn->close();
     return $posts;
 }
-?>

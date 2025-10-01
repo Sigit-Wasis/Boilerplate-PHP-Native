@@ -1,7 +1,6 @@
 CREATE DATABASE IF NOT EXISTS boilerplate;
 USE boilerplate;
 
-
 -- ====================
 -- USERS
 -- ====================
@@ -93,8 +92,6 @@ CREATE TABLE pv_post_image (
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
     FOREIGN KEY (media_id) REFERENCES media(id) ON DELETE CASCADE
 );
-
-
 
 -- ====================
 -- ROLES & PERMISSIONS

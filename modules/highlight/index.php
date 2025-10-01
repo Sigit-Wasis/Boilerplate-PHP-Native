@@ -41,7 +41,7 @@ $highlights = getUserHighlights($_SESSION['user']['id']);
         <div class="profile-header">
             <div class="row align-items-center">
                 <div class="col-md-4 text-center position-relative">
-                    <img id="profileImage" src="public/img/gambar1.jpg" alt="Profile Picture" class="profile-pic">
+                    <img id="profileImage" src="public/img/gambar3.jpg" alt="Profile Picture" class="profile-pic">
                     <input type="file" id="uploadProfile" accept="image/*" style="display:none;">
                     <label for="uploadProfile" class="position-absolute bottom-0 start-50 translate-middle-x mb-2" style="cursor:pointer;">
                         <i class="fas fa-camera" style="font-size:20px; color:white; background:#262626; padding:8px; border-radius:50%;"></i>
@@ -56,9 +56,9 @@ $highlights = getUserHighlights($_SESSION['user']['id']);
                     </div>
                     
                     <div class="profile-stats mb-3">
-                        <span><strong class="number">20</strong> posts</span>
-                        <span><strong class="number">120</strong> followers</span>
-                        <span><strong class="number">74</strong> following</span>
+                        <span><strong class="number">3</strong> posts</span>
+                        <span><strong class="number">642</strong> followers</span>
+                        <span><strong class="number">384</strong> following</span>
                     </div>
                 </div>
             </div>

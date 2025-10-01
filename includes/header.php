@@ -277,7 +277,7 @@
                 <a href="#" class="nav-item"><i class="fas fa-search"></i>Search</a>
                 <a href="#" class="nav-item"><i class="far fa-compass"></i>Explore</a>
                 <a href="#" class="nav-item"><i class="fas fa-video"></i>Reels</a>
-                <a href="#" class="nav-item position-relative"><i class="far fa-comment"></i>Messages <span class="notification-dot"></span></a>
+                <a href="/massage/index" class="nav-item position-relative"><i class="far fa-comment"></i>Messages <span class="notification-dot"></span></a>
                 <a href="#" class="nav-item position-relative"><i class="far fa-heart"></i>Notifications <span class="notification-dot"></span></a>
                 <a href="#" class="nav-item"><i class="far fa-plus-square"></i>Create</a>
                 <a href="/profil" class="nav-item"><i class="far fa-user"></i>Profile</a>

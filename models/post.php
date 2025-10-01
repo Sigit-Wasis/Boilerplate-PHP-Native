@@ -2,10 +2,8 @@
 require_once __DIR__ . '/../config/database.php';
 
 // CREATE POST DENGAN 1 IMAGE (tanpa looping)
-function createPostWithImages($caption, $images = []) {
+function createPostWithImages($caption, $user_id, $images = []) {
     $conn = getDBConnection();
-
-    $user_id = 1; // contoh user_id, sesuaikan dengan sesi login
 
     // 1. Insert ke table posts
     $sqlPost = "INSERT INTO posts (caption, user_id, created_at) VALUES (?, ?, NOW())"; 
@@ -68,28 +66,41 @@ function createPostWithImages($caption, $images = []) {
 
 
 // GET POST beserta 1 gambar
-function getAllPosts() {
+function getAllPosts($user_id = 0) {
     $conn = getDBConnection();
-    $sql = "SELECT p.id AS id_post, p.caption, p.created_at, u.username,
-                   m.id AS id_image, m.file
+
+    $sql = "SELECT p.id AS id_post, p.caption, p.created_at, u.username, u.nama_lengkap,
+                   m.id AS id_image, m.file,
+                   COUNT(l.id) AS like_count,
+                   MAX(CASE WHEN l.user_id = ? THEN 1 ELSE 0 END) AS is_liked
             FROM posts p
             JOIN users u ON p.user_id = u.id
             LEFT JOIN pv_post_image pi ON p.id = pi.post_id
             LEFT JOIN media m ON pi.media_id = m.id
+            LEFT JOIN likes l ON p.id = l.post_id
+            GROUP BY p.id, p.caption, p.created_at, u.username, u.nama_lengkap, m.id, m.file
             ORDER BY p.created_at DESC";
-    $result = $conn->query($sql);
+   $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     $posts = [];
     while ($row = $result->fetch_assoc()) {
         $posts[] = [
-            'id_post'    => $row['id_post'],
-            'caption'    => $row['caption'],
-            'created_at' => $row['created_at'],
-            'username'   => $row['username'],
-            'image'      => $row['file'] ?? null // cuma 1 gambar
+            'id_post'      => $row['id_post'],
+            'caption'      => $row['caption'],
+            'created_at'   => $row['created_at'],
+            'username'     => $row['username'],
+            'nama_lengkap' => $row['nama_lengkap'],
+            'image'        => $row['file'] ?? null,
+            'like_count'   => $row['like_count'],
+            'is_liked'     => $row['is_liked'] == 1
         ];
     }
+   $stmt->close();
     $conn->close();
+
     return $posts;
 }
 ?>

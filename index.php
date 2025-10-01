@@ -94,6 +94,16 @@ switch ($request) {
         require_once __DIR__ . '/modules/home/insert_story.php';
         break;
     
+         case '/highlight':
+    case '/highlight/store':
+        require_once __DIR__ . '/modules/highlight/store.php';
+        break;
+
+         case '/messages':
+    case '/messages/index':
+        require_once __DIR__ . '/modules/messages/index.php';
+        break;
+        
     default:
         http_response_code(404);
         echo "Halaman tidak ditemukan!";

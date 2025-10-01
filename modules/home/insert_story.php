@@ -1,36 +1,29 @@
 <?php
-header('Content-Type: application/json');
 
-// Ambil data JSON dari request body
-$data = json_decode(file_get_contents('php://input'), true);
+require_once(__DIR__ . '/../../config/database.php'); // gunakan file database.php
 
-echo($data);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (isset($input['image'])) {
+        $conn = getDBConnection();
+        $user_id = 1; // Ganti dengan user yang sedang login
+        $image_base64 = $input['image']; // Simpan base64 langsung
+        $text_elements = '';
+        $story_type = 'public';
 
-if (!$data || empty($data['image'])) {
-    echo json_encode(['success' => false, 'message' => 'Data tidak lengkap']);
+        $stmt = $conn->prepare("INSERT INTO story (user_id, image_path, text_elements, story_type) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("isss", $user_id, $image_base64, $text_elements, $story_type);
+        $result = $stmt->execute();
+
+        if ($result) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'DB error']);
+        }
+        $stmt->close();
+        $conn->close();
+    } else {
+        echo json_encode(['success' => false, 'message' => 'No image']);
+    }
     exit;
 }
-
-// Contoh: Ambil user_id dari session (atau sesuaikan dengan sistem login kamu)
-session_start();
-$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1; // fallback user_id 1
-
-$image = $data['image'];
-$textElements = json_encode($data['textElements'] ?? []);
-$created_at = date('Y-m-d H:i:s');
-
-// // Simpan ke database (contoh tabel: stories)
-// $stmt = $conn->prepare("INSERT INTO story (user_id, image, text_elements, created_at) VALUES (?, ?, ?, ?)");
-// $stmt->bind_param("isss", $user_id, $image, $textElements, $created_at);
-
-echo "User ID: $user_id\n";
-echo "Image: $image\n";
-
-// if ($stmt->execute()) {
-//     echo json_encode(['success' => true]);
-// } else {
-//     echo json_encode(['success' => false, 'message' => 'Gagal menyimpan ke database']);
-// }
-
-// $stmt->close();
-// $conn->close();

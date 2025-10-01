@@ -1,5 +1,6 @@
 <?php
 // modules/instagram/instagram.php
+session_start();
 
 // Tampilkan header
 require_once __DIR__ . '/../../includes/header.php';
@@ -7,10 +8,13 @@ require_once __DIR__ . '/../../includes/header.php';
 require_once __DIR__ . '/../../models/Post.php';
 
 // include css external
-echo '<link rel="stylesheet" href="modules/home/instagram.css">';
+echo '<link rel="stylesheet" href="/modules/home/instagram.css">';
+// get user_id
+$user_id = isset($_SESSION['user']['id']) ? intval($_SESSION['user']['id']) : 0;
 
 // Ambil semua post
-$posts = getAllPosts();
+$posts = getAllPosts($user_id);
+
 
 // Sample data for stories and suggestions
 $stories = [
@@ -19,8 +23,8 @@ $stories = [
         'is_current_user' => true,
         'avatar' => '../../public/img/gambar2.jpg',
         'stories' => [
-            ['image' => '../../public/img/gambar3.jpg', 'timestamp' => '2 jam'],
-            ['image' => '../../public/img/gambar4.jpg', 'timestamp' => '4 jam']
+            ['image' => '../../public/img/gambar2.jpg', 'timestamp' => '2 jam'],
+            ['image' => '../../public/img/gambar2.jpg', 'timestamp' => '4 jam']
         ],
         'has_story' => true
     ],
@@ -211,13 +215,13 @@ function renderHighlightsSection($stories) {
                         <div class="share-options">
                             <div class="share-option" onclick="shareToStory('story')">
                                 <div class="share-avatar">
-                                    <img src="../../public/img/gambar3.jpg" alt="Your Story">
+                                    <img src="../../public/img/gambar2.jpg" alt="Your Story">
                                 </div>
                                 <span>Cerita Anda</span>
                             </div>
                             <div class="share-option" onclick="shareToStory('close_friends')">
                                 <div class="share-avatar close-friends">
-                                    <img src="../../public/img/gambar3.jpg" alt="Close Friends">
+                                    <img src="../../public/img/gambar2.jpg" alt="Close Friends">
                                     <div class="close-friends-badge">⭐</div>
                                 </div>
                                 <span>Teman Dekat</span>
@@ -268,8 +272,7 @@ function renderFeedSection($posts, $stories) {
                         <!-- Post Images (multiple) -->
                         <?php if (!empty($post['image'])): ?>
                             <div class="post-images">
-                 <img src="<?= '/public/img/' . htmlspecialchars($post['image']) ?>" alt="Post Image">
-                                
+                                <img src="<?= '/public/img/' . htmlspecialchars($post['image']) ?>" alt="Post Image">
                             </div>
                         <?php else: ?>
                             <div class="post-placeholder">
@@ -277,13 +280,18 @@ function renderFeedSection($posts, $stories) {
                             </div>
                         <?php endif; ?>
                         
-                        <!-- Post Actions -->
+                       <!-- Post Actions -->
                         <div class="post-actions">
-                            <button class="post-action">❤</button>
+                            <form action="../../models/Like.php" method="POST">
+                            <input type="hidden" name="post_id" value="<?= $post['id_post'] ?>">
+                                <input type="hidden" name="type" value="post">
+                                <button type="submit" class="post-action heart-button <?= $post['is_liked'] ? 'liked' : '' ?>"></button>
+                            </form>
                             <button class="post-action">💬</button>
                             <button class="post-action">📤</button>
                             <button class="post-action">🔖</button>
                         </div>
+                        
                         
                         <!-- Post Likes & Caption -->
                         <div class="post-content-text">
@@ -314,12 +322,12 @@ function renderRightSidebar($suggestions) {
             <div class="profile-info">
                 <form id="formProfilePic" enctype="multipart/form-data">
                     <label for="profilePicInput">
-                        <img id="profileAvatar" src="../../public/img/gambar1.jpg" alt="_dwiirhma" class="profile-avatar">
+                        <img id="profileAvatar" src="../../public/img/gambar2.jpg" alt="stanngsh" class="profile-avatar">
                     </label>
                     <input type="file" id="profilePicInput" name="profile_pic" accept="image/*" style="display:none;">
                 </form>
                 <div class="profile-details">
-                    <h4>_dwiirhma</h4>
+                    <h6>stanngsh</h6>
                 </div>
             </div>
             <button class="switch-btn">Alihkan</button>

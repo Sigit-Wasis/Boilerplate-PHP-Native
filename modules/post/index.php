@@ -29,7 +29,7 @@ require_once __DIR__ . '/../../config/database.php';
                     
                      <div class="profile-stats mb-3">
                         <span><strong class="number">3</strong> posts</span>
-                        <span><strong class="number">1.207</strong> followers</span>
+                        <span><strong class="number">1.217</strong> followers</span>
                         <span><strong class="number">567</strong> following</span>
                     </div>
                 </div>

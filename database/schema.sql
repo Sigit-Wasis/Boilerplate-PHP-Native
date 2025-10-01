@@ -120,9 +120,10 @@ CREATE TABLE role_permissions (
 CREATE TABLE story (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    image_path VARCHAR(255),
+    image_path longtext NOT NULL,
     text_elements TEXT,
     story_type ENUM('public', 'close_friends') DEFAULT 'public',
+    status ENUM('active', 'expired') DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expires_at TIMESTAMP DEFAULT (CURRENT_TIMESTAMP + INTERVAL 24 HOUR)
 );

@@ -26,7 +26,7 @@ body {
 /* Main Content */
 .main-content {
     flex: 1;
-    max-width: 614px;
+    /* max-width: 614px; */
 }
 
 /* Feed Section */
@@ -140,6 +140,11 @@ body {
 .post-action:last-child {
     margin-left: auto !important;
     margin-right: 0;
+}
+
+.post-action:first-child {
+    color: #ff3040 !important; /* merah Instagram */
+    font-size: 22px;
 }
 
 /* Post Content Text */
@@ -1030,9 +1035,38 @@ body {
 }
 
 .story-progress-bars {
+    display: none !important;
+}
+
+/* Hilangkan garis di bawah highlights section */
+.highlights-section {
+    margin-bottom: 20px;
+    border-bottom: none !important;
+    padding-bottom: 0;
+}
+
+.highlights-container {
     display: flex;
-    gap: 2px;
-    margin-bottom: 15px;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+    border-bottom: none !important;
+}
+
+/* Hilangkan scrollbar highlights */
+.highlights-container::-webkit-scrollbar {
+    display: none;
+}
+
+.highlights-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Pastikan tidak ada border di elemen parent */
+.main-content {
+    border-bottom: none !important;
 }
 
 .story-progress-bar {
@@ -1230,6 +1264,11 @@ body {
     margin-right: 0;
 }
 
+.post-action:first-child {
+    color: #ff3040 !important; /* merah Instagram */
+    font-size: 22px;
+}
+
 .post-content-text {
     padding: 0 12px 12px;
 }
@@ -1422,3 +1461,21 @@ body {
         max-width: 400px;
     }
 }
+
+
+.error-message {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    .message {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .heart-button.liked::after {
+        content: '❤️';
+        color: red;
+    }
+    .heart-button::after {
+        content: '🤍';
+    }
+

@@ -1,14 +1,17 @@
 
 <?php
 // modules/instagram/instagram.php
-
+session_start();
 // Tampilkan header
 require_once __DIR__ . '/../../includes/header.php';
 // Call modal post
 require_once __DIR__ . '/../../models/Post.php';
 
+// get user_id
+$user_id = isset($_SESSION['user']['id']) ? intval($_SESSION['user']['id']) : 0;
+
 // Ambil semua post
-$posts = getAllPosts();
+$posts = getAllPosts($user_id);
 
 // Sample data for stories and suggestions
 $stories = [
@@ -277,7 +280,11 @@ function renderFeedSection($posts, $stories) {
                         
                         <!-- Post Actions -->
                         <div class="post-actions">
-                            <button class="post-action">❤️</button>
+                            <form action="../../models/Like.php" method="POST">
+                            <input type="hidden" name="post_id" value="<?= $post['id_post'] ?>">
+                                <input type="hidden" name="type" value="post">
+                                <button type="submit" class="post-action heart-button <?= $post['is_liked'] ? 'liked' : '' ?>"></button>
+                            </form>
                             <button class="post-action">💬</button>
                             <button class="post-action">📤</button>
                             <button class="post-action">🔖</button>
@@ -399,6 +406,28 @@ function renderRightSidebar($suggestions) {
         .highlights-section {
             margin-bottom: 20px;
         }
+
+         .error-message, .message {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+    }
+    .error-message {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    .message {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .heart-button.liked::after {
+        content: '❤️';
+        color: red;
+    }
+    .heart-button::after {
+        content: '🤍';
+    }
+
 
         .highlights-title {
             font-weight: 600;

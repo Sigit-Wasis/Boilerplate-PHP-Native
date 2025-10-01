@@ -3,18 +3,20 @@ require_once __DIR__ . '/../config/database.php'; // sesuaikan path ke database.
 session_start();
 
 // Cek apakah user sudah login
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user']['id'])) {
     echo json_encode(["status" => "error", "message" => "User belum login"]);
     exit;
 }
 
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['user']['id'];
 $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
 
 if ($post_id <= 0) {
     echo json_encode(["status" => "error", "message" => "Post tidak valid"]);
     exit;
 }
+
+    $conn = getDBConnection();
 
 // Cek apakah user sudah like post ini
 $stmt = $conn->prepare("SELECT id FROM likes WHERE post_id = ? AND user_id = ?");
@@ -27,7 +29,7 @@ if ($result->num_rows > 0) {
     $delete = $conn->prepare("DELETE FROM likes WHERE post_id = ? AND user_id = ?");
     $delete->bind_param("ii", $post_id, $user_id);
     $delete->execute();
-    $action = "unliked";
+    $action = "unliked"a;
 } else {
     // Jika belum → insert like
     $insert = $conn->prepare("INSERT INTO likes (post_id, user_id) VALUES (?, ?)");
@@ -44,10 +46,5 @@ $res = $count->get_result()->fetch_assoc();
 $totalLikes = $res['total'];
 
 
-
-// Return JSON
-echo json_encode([
-    "status" => "success",
-    "action" => $action,
-    "totalLikes" => $totalLikes
-]);
+header('Location: /home/index');
+exit;

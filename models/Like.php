@@ -29,7 +29,7 @@ if ($result->num_rows > 0) {
     $delete = $conn->prepare("DELETE FROM likes WHERE post_id = ? AND user_id = ?");
     $delete->bind_param("ii", $post_id, $user_id);
     $delete->execute();
-    $action = "unliked"a;
+    $action = "unliked";
 } else {
     // Jika belum → insert like
     $insert = $conn->prepare("INSERT INTO likes (post_id, user_id) VALUES (?, ?)");
@@ -46,5 +46,9 @@ $res = $count->get_result()->fetch_assoc();
 $totalLikes = $res['total'];
 
 
-header('Location: /home/index');
+echo json_encode([
+    "status" => "success",
+    "action" => $action,
+    "totalLikes" => $totalLikes
+]);
 exit;

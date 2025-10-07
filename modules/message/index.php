@@ -1,231 +1,106 @@
+<?php
+// instagram_dm_clone.php
+// Bagian ini adalah BLOK KODE PHP. Di sini Anda bisa menaruh logika server,
+// seperti mengambil data pengguna dari database, atau menentukan variabel.
+
+// Contoh variabel PHP untuk membuat konten lebih dinamis:
+$username = "dwiirhma";
+$request_count = 7; 
+$chat_list_title = "Pesan";
+
+// Catatan: Jika Anda tidak memerlukan logika PHP saat ini,
+// Anda bisa menghapus blok '<?php ... ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram Clone - Direct</title>
+    <title>Instagram DM Clone (PHP)</title>
     <style>
+        /* CSS Dasar - Mode Gelap */
+        :root {
+            --bg-dark: #121212;
+            --bg-medium: #1e1e1e;
+            --bg-light: #2c2c2c;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a8a8a8;
+            --border-color: #363636;
+            --instagram-blue: #0095f6;
+            --accent-green: #38b000;
+        }
+
         body {
-            background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             height: 100vh;
+            overflow: hidden;
         }
-        .sidebar {
-            width: 300px;
-            background-color: #111;
-            padding: 10px;
-            overflow-y: auto;
-        }
-        .sidebar h2 {
-            font-size: 16px;
-            margin: 10px 0;
-        }
-        .chat-list {
-            list-style: none;
-            padding: 0;
-        }
-        .chat-item {
+
+        /* --- Layout & Komponen CSS lainnya (SAMA SEPERTI SEBELUMNYA) --- */
+        .container {
             display: flex;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #333;
-            cursor: pointer;
+            width: 100%;
         }
-        .chat-item.active {
-            background-color: #222;
-        }
-        .chat-item img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .chat-item .unread {
-            background-color: #0095f6;
-            border-radius: 50%;
-            width: 8px;
-            height: 8px;
-            margin-left: 10px;
-        }
-        .chat-content {
-            flex-grow: 1;
-        }
-        .chat-content p {
-            margin: 0;
-            font-size: 14px;
-        }
-        .chat-content .time {
-            color: #aaa;
-            font-size: 12px;
-        }
-        .main {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-        }
-        .message-box {
-            background: url('https://via.placeholder.com/150') no-repeat center;
-            width: 100px;
-            height: 100px;
-            margin-bottom: 10px;
-            display: none;
-        }
-        .message-area {
-            display: none;
-            width: 70%;
-            height: 80%;
-            background-color: #111;
-            padding: 20px;
-            border-radius: 10px;
-            overflow-y: auto;
-        }
-        .message-area.active {
-            display: block;
-        }
-        .message-area p {
-            color: #fff;
-            margin: 10px 0;
-            word-wrap: break-word;
-        }
-        .input-area {
-            width: 70%;
-            margin-top: 10px;
-            display: none;
-        }
-        .input-area.active {
-            display: flex;
-        }
-        .input-area input {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #333;
-            border-radius: 5px 0 0 5px;
-            background-color: #222;
-            color: #fff;
-        }
-        .input-area button {
-            background-color: #0095f6;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-        }
-        .main p {
-            color: #aaa;
-            font-size: 14px;
-        }
-        .default-text {
-            display: block;
-        }
+
+        .sidebar { /* ... CSS Navigasi Samping ... */ width: 72px; background-color: var(--bg-medium); border-right: 1px solid var(--border-color); padding-top: 20px; display: flex; flex-direction: column; align-items: center; }
+        .sidebar-icon { /* Placeholder ikon */ width: 28px; height: 28px; background-color: var(--text-secondary); }
+        .inbox { /* ... CSS Kotak Masuk ... */ width: 390px; background-color: var(--bg-medium); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding-top: 10px; }
+        .inbox-header { padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .search-box input { width: 100%; padding: 8px 10px; border: none; border-radius: 8px; background-color: var(--bg-light); color: var(--text-primary); }
+        .notes-section { padding: 10px 20px; border-bottom: 1px solid var(--border-color); }
+        .note-circle { width: 60px; height: 60px; border-radius: 50%; background-color: var(--bg-light); border: 2px solid var(--border-color); }
+        .chat-item { display: flex; align-items: center; padding: 12px 20px; cursor: pointer; position: relative; }
+        .chat-item:hover, .chat-item.active { background-color: var(--bg-light); }
+        .chat-avatar { width: 50px; height: 50px; border-radius: 50%; margin-right: 15px; position: relative; }
+        .online-dot { position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; background-color: var(--accent-green); border-radius: 50%; border: 2px solid var(--bg-medium); }
+        .unread-indicator { position: absolute; right: 20px; width: 8px; height: 8px; background-color: var(--instagram-blue); border-radius: 50%; }
+        .message-panel { /* ... CSS Panel Pesan Kanan ... */ flex-grow: 1; display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; }
+        .message-panel button { background-color: var(--instagram-blue); color: var(--text-primary); border: none; padding: 8px 15px; border-radius: 8px; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h2>Catatan</h2>
-        <ul class="chat-list">
-            <li class="chat-item" data-chat="catatan-anda">
-                <img src="https://via.placeholder.com/40" alt="User">
-                <div class="chat-content">
-                    <p>Catatan Anda <span class="unread"></span></p>
-                    <p class="time">13 jam</p>
+
+    <div class="container">
+        <div class="sidebar">
+            </div>
+
+        <div class="inbox">
+            <div class="inbox-header">
+                <h2><?= $username ?></h2> 
+                <span style="font-size: 20px; cursor: pointer;">...</span> 
+            </div>
+            
+            <div class="search-box">
+                <input type="text" placeholder="Cari">
+            </div>
+            
+            <div class="notes-section">
+                <h3>Catatan</h3>
                 </div>
-            </li>
-            <li class="chat-item" data-chat="salsabila">
-                <img src="https://via.placeholder.com/40" alt="User">
-                <div class="chat-content">
-                    <p>salsabila ardana</p>
-                    <p class="time">17 jam</p>
+            
+            <div class="chat-list-section">
+                <div class="chat-list-header">
+                    <h3><?= $chat_list_title ?></h3>
+                    <span class="request-link">Permintaan (<?= $request_count ?>)</span>
                 </div>
-            </li>
-            <li class="chat-item" data-chat="raauul">
-                <img src="https://via.placeholder.com/40" alt="User">
-                <div class="chat-content">
-                    <p>Raauul</p>
-                    <p class="time">13 jam</p>
+                
+                <div class="chat-item active">
+                    </div>
+                <div class="chat-item">
+                    </div>
                 </div>
-            </li>
-        </ul>
-        <h2>Pesan Anda</h2>
-        <ul class="chat-list">
-            <li class="chat-item" data-chat="puuji">
-                <img src="https://via.placeholder.com/40" alt="User">
-                <div class="chat-content">
-                    <p>puuji masama</p>
-                    <p class="time">17 jam</p>
-                </div>
-            </li>
-            <li class="chat-item" data-chat="8lowme">
-                <img src="https://via.placeholder.com/40" alt="User">
-                <div class="chat-content">
-                    <p>8lowme</p>
-                    <p class="time">2 hari</p>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div class="main">
-        <div class="message-box"></div>
-        <div class="message-area">
-            <p>Pesan dari <span id="chat-name"></span>: Halo, apa kabar?</p>
         </div>
-        <div class="input-area">
-            <input type="text" id="message-input" placeholder="Ketik pesan...">
-            <button onclick="sendMessage()">Kirim</button>
+
+        <div class="message-panel">
+            <h1>Pesan Anda</h1>
+            <p>Kirim foto dan pesan pribadi ke teman atau grup</p>
+            <button>Kirim Pesan</button>
         </div>
-        <p class="default-text">Kirim foto dan pesan pribadi ke teman atau grup.</p>
     </div>
 
-    <script>
-        const chatItems = document.querySelectorAll('.chat-item');
-        const messageArea = document.querySelector('.message-area');
-        const messageBox = document.querySelector('.message-box');
-        const defaultText = document.querySelector('.default-text');
-        const inputArea = document.querySelector('.input-area');
-        const chatName = document.getElementById('chat-name');
-        const messageInput = document.getElementById('message-input');
-
-        chatItems.forEach(item => {
-            item.addEventListener('click', () => {
-                chatItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-
-                messageArea.classList.add('active');
-                messageBox.style.display = 'none';
-                defaultText.style.display = 'none';
-                inputArea.classList.add('active');
-                chatName.textContent = item.querySelector('.chat-content p').textContent;
-
-                console.log(`Opened chat with ${chatName.textContent}`);
-            });
-        });
-
-        function sendMessage() {
-            const name = chatName.textContent;
-            const messageText = messageInput.value.trim();
-            if (messageText) {
-                const message = `${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} - ${name}: ${messageText}`;
-                const p = document.createElement('p');
-                p.textContent = message;
-                messageArea.appendChild(p);
-                messageInput.value = '';
-                messageArea.scrollTop = messageArea.scrollHeight;
-                console.log(`Message sent to ${name}: ${messageText}`);
-            }
-        }
-
-        messageInput.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter' && messageInput.value.trim()) {
-                sendMessage();
-            }
-        });
-    </script>
 </body>
 </html>

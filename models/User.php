@@ -77,6 +77,56 @@ function getUsers() {
     return $users;
 }
 
+function getUsersWithFollowingStatus($current_user_id) {
+    // Pastikan Anda mendapatkan koneksi database
+    $conn = getDBConnection();
+    
+    // Query SQL menggunakan LEFT JOIN untuk menggabungkan tabel users dan follow
+    // Kami memeriksa apakah ada baris di tabel 'follow' di mana 'follower_id'
+    // adalah pengguna yang sedang login ($current_user_id) dan 'followed_id'
+    // adalah pengguna yang sedang kita ambil datanya (u.id).
+    $sql = "
+        SELECT 
+            u.*,
+            f.follower_id
+        FROM 
+            users u
+        LEFT JOIN 
+            follows f ON u.id = f.following_id AND f.follower_id = ?
+        WHERE
+            u.id != ?  -- Opsional: Jangan tampilkan diri sendiri
+    ";
+
+    // Gunakan Prepared Statement untuk keamanan!
+    $stmt = $conn->prepare($sql);
+    
+    // Binding parameter untuk placeholder '?'
+    // 'ii' berarti dua variabel integer
+    $stmt->bind_param("ii", $current_user_id, $current_user_id);
+    
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    $users = [];
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            // Logika untuk menambahkan kolom 'is_following'
+            // Jika kolom f.follower_id (dari tabel 'follow') tidak NULL, 
+            // berarti ada data follow yang cocok, sehingga is_following = true.
+            $row['is_following'] = ($row['follower_id'] !== null);
+            
+            // Hapus kolom helper 'follower_id' sebelum dikirimkan ke frontend
+            unset($row['follower_id']); 
+            
+            $users[] = $row;
+        }
+    }
+    
+    $stmt->close();
+    $conn->close();
+    return $users;
+}
+
 
 // Fungsi authentikasi
 function authenticateUser($email, $password) {

@@ -6,6 +6,8 @@ session_start();
 require_once __DIR__ . '/../../includes/header.php';
 // Call modal post
 require_once __DIR__ . '/../../models/Post.php';
+require_once __DIR__ . '/../../models/User.php';
+require_once __DIR__ . '/../../models/Follow.php';
 
 // get user_id
 $user_id = isset($_SESSION['user']['id']) ? intval($_SESSION['user']['id']) : 0;
@@ -70,13 +72,7 @@ $stories = [
     ]
 ];
 
-$suggestions = [
-    ['username' => 'dltarflinda_', 'avatar' => '../../public/img/gambar8.jpg','mutual' => 'Disarankan untuk Anda'],
-    ['username' => 'johanis', 'avatar' => '../../public/img/gambar10.jpg', 'mutual' => 'Disarankan untuk Anda'],
-    ['username' => 'putri_', 'avatar' => '../../public/img/gambar11.jpg', 'mutual' => 'Disarankan untuk Anda'],
-    ['username' => 'yogafirmansaputra', 'avatar' => '../../public/img/gambar12.jpg', 'mutual' => 'Diikuti oleh mamanx_x'],
-    ['username' => 'eldofilmafrian', 'avatar' => '../../public/img/gambar13.jpg', 'mutual' => 'Diikuti oleh fajridn_']
-];
+$suggestions = getUsersWithFollowingStatus($_SESSION['user']['id'] ?? 0);
 
 function renderHighlightsSection($stories) {
     ?>
@@ -336,16 +332,52 @@ function renderRightSidebar($suggestions) {
                 <a href="#" class="see-all">Lihat Semua</a>
             </div>
             
-            <?php foreach($suggestions as $suggestion): ?>
-            <div class="suggestion-item">
+           <?php 
+            // 1. Tentukan URL default eksternal (gunakan yang lebih singkat)
+            $default_avatar_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png';
+            ?>
+
+            <?php foreach($suggestions as $user): 
+
+                // 2. Tentukan path lokal file dengan aman (menggunakan ?? untuk menghindari error jika 'foto' tidak ada)
+                $foto_filename = $user['foto'] ?? ''; 
+                $local_photo_path = '../../public/img/' . $foto_filename; 
+                    
+                if (file_exists($local_photo_path)) {
+                    // KONDISI INI AKAN TRUE JIKA FILE TIDAK ADA
+                    $image_source = $default_avatar_url; 
+                } else {
+                    $image_source = htmlspecialchars($local_photo_path); 
+                }
+                
+                // --- 3. Logika Penentuan Teks Tombol ---
+                // $is_following akan bernilai boolean (true/false)
+                $is_following = $user['is_following']; 
+
+                $button_text = $is_following ? 'Mengikuti' : 'Ikuti'; // Perbaikan: Teks tombol harus beda
+                $data_following_value = $is_following ? 'true' : 'false'; // Nilai string untuk data attribute
+
+            ?>
+
+            <div class="suggestion-item" data-user-id="<?php echo htmlspecialchars($user['id'] ?? 0); ?>">
                 <div class="suggestion-info">
-                    <img src="<?php echo $suggestion['avatar']; ?>" alt="<?php echo $suggestion['username']; ?>" class="suggestion-avatar">
+                    
+                    <img src="<?= $image_source; ?>" 
+                        alt="<?php echo htmlspecialchars($user['username'] ?? 'Pengguna'); ?>" 
+                        class="suggestion-avatar">
+                    
                     <div class="suggestion-details">
-                        <h6><?php echo $suggestion['username']; ?></h6>
-                        <p><?php echo $suggestion['mutual']; ?></p>
+                        <h6><?php echo htmlspecialchars($user['username'] ?? 'Nama Pengguna'); ?></h6>
+                        <span class="suggestion-mutual">Disarankan untuk Anda</span>
                     </div>
                 </div>
-                <button class="follow-btn">Ikuti</button>
+                
+                <button class="follow-btn" 
+                        data-user-id="<?php echo htmlspecialchars($user['id'] ?? 0); ?>"
+                        data-following="<?php echo $data_following_value; ?>"
+                        onclick="toggleFollow(this)">
+                    <?php echo $button_text; ?>
+                </button>
             </div>
             <?php endforeach; ?>
         </div>
@@ -408,26 +440,25 @@ function renderRightSidebar($suggestions) {
         }
 
          .error-message, .message {
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 5px;
-    }
-    .error-message {
-        background-color: #f8d7da;
-        color: #721c24;
-    }
-    .message {
-        background-color: #d4edda;
-        color: #155724;
-    }
-    .heart-button.liked::after {
-        content: '❤️';
-        color: red;
-    }
-    .heart-button::after {
-        content: '🤍';
-    }
-
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .message {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .heart-button.liked::after {
+            content: '❤️';
+            color: red;
+        }
+        .heart-button::after {
+            content: '🤍';
+        }
 
         .highlights-title {
             font-weight: 600;
@@ -1325,6 +1356,34 @@ function renderRightSidebar($suggestions) {
             margin-top: 8px;
         }
 
+        .follow-btn {
+    background: none;
+    border: none;
+    color: #0095f6;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.follow-btn:hover {
+    color: #ffffff;
+}
+
+.follow-btn.following {
+    color: #ffffff;
+}
+
+.follow-btn.following:hover {
+    color: #ed4956;
+}
+
+.follow-btn:disabled {
+    cursor: not-allowed;
+}
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .instagram-container {
@@ -1960,6 +2019,72 @@ function renderRightSidebar($suggestions) {
                 startStoryProgress();
             }
         });
+
+        // Follow/Unfollow Function
+        function toggleFollow(button) {
+            const userId = button.getAttribute('data-user-id');
+            const isFollowing = button.getAttribute('data-following');
+
+            let action;
+            if (isFollowing == 'true') {
+                action = 'unfollow';
+            } else {
+                action = 'follow';
+            }
+
+            
+            // Disable button during request
+            button.disabled = true;
+            button.style.opacity = '0.6';
+            
+            console.log(`Attempting to ${action} user ID: ${userId}`);
+
+
+            // Send AJAX request
+            fetch('../../models/Follow.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=${action}&user_id=${userId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update button state
+                    if (action === 'follow') {
+                        button.textContent = 'Mengikuti';
+                        button.setAttribute('data-following', 'true');
+                        button.classList.add('following');
+                        
+                        // Show unfollow on hover
+                        button.addEventListener('mouseenter', function() {
+                            this.textContent = 'Berhenti Mengikuti';
+                        });
+                        button.addEventListener('mouseleave', function() {
+                            if (this.getAttribute('data-following') === 'true') {
+                                this.textContent = 'Mengikuti';
+                            }
+                        });
+                    } else {
+                        button.textContent = 'Ikuti';
+                        button.setAttribute('data-following', 'false');
+                        button.classList.remove('following');
+                    }
+                } else {
+                    alert(data.message || 'Terjadi kesalahan');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat memproses permintaan');
+            })
+            .finally(() => {
+                // Re-enable button
+                button.disabled = false;
+                button.style.opacity = '1';
+            });
+        }
     </script>
 
     <script src="modules/home/instagram.js"></script>

@@ -97,7 +97,7 @@ function getUsersWithFollowingStatus($current_user_id) {
             u.id != ?  -- Opsional: Jangan tampilkan diri sendiri
     ";
 
-    // Gunakan Prepared Statement untuk keamanan!
+    // Gunakan Prepared Statement untuk keamanan! 
     $stmt = $conn->prepare($sql);
     
     // Binding parameter untuk placeholder '?'
